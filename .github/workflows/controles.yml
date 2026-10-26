@@ -1,0 +1,43 @@
+name: Contrôles
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Dépôt d'un compte personnel : les runners auto-hébergés de ssk-it ne le servent pas, les contrôles tournent sur ceux de GitHub.
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  referentiel:
+    name: Référentiel (tests, fiches, photos en LFS)
+    runs-on: ubuntu-latest
+    steps:
+      # Sans `lfs: true` : les photos restent des pointeurs, ce que le contrôle de l'INV-3 lit de toute façon dans l'index.
+      - uses: actions/checkout@v7
+
+      # Lit la version dans `packageManager`.
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Installer les dépendances
+        run: pnpm install --frozen-lockfile
+
+      - name: Tests
+        run: pnpm test
+
+      - name: Fiches conformes à leur schéma, liens résolus
+        run: pnpm verifier
+
+      - name: Photos en Git LFS (INV-3)
+        run: pnpm verifier:lfs

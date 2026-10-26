@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sskorupski/skarden/schemas/plante.schema.json",
+  "title": "Plante — ce qu'elle demande",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "nom",
+    "famille",
+    "type",
+    "cycle"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Identifiant en kebab-case, égal au nom du fichier."
+    },
+    "nom": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nom_latin": {
+      "type": "string"
+    },
+    "famille": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "type": {
+      "enum": [
+        "legume",
+        "aromatique",
+        "fruitier",
+        "agrume",
+        "fleur",
+        "ornementale",
+        "succulente"
+      ]
+    },
+    "cycle": {
+      "enum": [
+        "annuelle",
+        "bisannuelle",
+        "vivace"
+      ]
+    },
+    "exposition": {
+      "enum": [
+        "plein-soleil",
+        "mi-ombre",
+        "ombre"
+      ]
+    },
+    "arrosage": {
+      "enum": [
+        "faible",
+        "modere",
+        "regulier",
+        "abondant"
+      ]
+    },
+    "temperature_min_c": {
+      "type": "number",
+      "description": "Température en dessous de laquelle la plante souffre."
+    },
+    "calendrier": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "semis_interieur": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "uniqueItems": true,
+          "description": "Mois de l'année, de 1 à 12."
+        },
+        "semis_exterieur": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "uniqueItems": true,
+          "description": "Mois de l'année, de 1 à 12."
+        },
+        "plantation": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "uniqueItems": true,
+          "description": "Mois de l'année, de 1 à 12."
+        },
+        "floraison": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "uniqueItems": true,
+          "description": "Mois de l'année, de 1 à 12."
+        },
+        "recolte": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "uniqueItems": true,
+          "description": "Mois de l'année, de 1 à 12."
+        },
+        "taille": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "uniqueItems": true,
+          "description": "Mois de l'année, de 1 à 12."
+        }
+      }
+    },
+    "associations": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "favorables": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "uniqueItems": true
+        },
+        "defavorables": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^medias/"
+      },
+      "uniqueItems": true,
+      "description": "Chemins depuis la racine du dépôt."
+    }
+  }
+}

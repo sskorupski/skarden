@@ -1,0 +1,45 @@
+# Configuration du référentiel — lue par le vérificateur et par le site de présentation.
+schema_version: 1
+
+projet:
+  nom: Skarden
+  description: >
+    Ce que je cultive à la maison : une fiche par plante pour ce qu'elle
+    demande, une fiche par culture pour ce qui pousse réellement, et un journal
+    daté de ce qui s'y est passé.
+
+# Chaque collection : son dossier, le schéma de son frontmatter, et les champs
+# qui désignent une fiche d'une autre collection par son `id`. Un chemin pointé
+# désigne un champ imbriqué ; un champ liste désigne une fiche par élément.
+collections:
+  familles:
+    dossier: familles
+    schema: schemas/famille.schema.json
+
+  plantes:
+    dossier: plantes
+    schema: schemas/plante.schema.json
+    liens:
+      famille: familles
+      associations.favorables: plantes
+      associations.defavorables: plantes
+
+  emplacements:
+    dossier: emplacements
+    schema: schemas/emplacement.schema.json
+
+  cultures:
+    dossier: cultures
+    schema: schemas/culture.schema.json
+    liens:
+      plante: plantes
+      emplacement: emplacements
+
+  # Le journal se range par année (`journal/2026/`) et n'a pas d'`id` :
+  # une entrée se nomme d'après sa date (`2026-05-02-basilic-rempotage.md`).
+  journal:
+    dossier: journal
+    schema: schemas/journal.schema.json
+    par_annee: true
+    liens:
+      culture: cultures

@@ -1,0 +1,20 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      # Aucune contrainte de pair vérifiée entre `ajv` et `yaml` : un seul groupe pour les mineures et correctifs, les majeures arrivent une à une.
+      mineures:
+        patterns: ["*"]
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      # Toutes les actions dans une seule demande de fusion : chacune modifie `controles.yml`, et des demandes séparées entrent en conflit dès que la première est fusionnée.
+      actions:
+        patterns: ["*"]
