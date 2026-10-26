@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sskorupski/skarden/schemas/famille.schema.json",
+  "title": "Famille botanique",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "nom"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Identifiant en kebab-case, égal au nom du fichier."
+    },
+    "nom": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nom_latin": {
+      "type": "string"
+    }
+  }
+}

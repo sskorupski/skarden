@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sskorupski/skarden/schemas/culture.schema.json",
+  "title": "Culture — une plante, un emplacement, une période",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "plante",
+    "emplacement",
+    "debut",
+    "statut"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "Identifiant en kebab-case, égal au nom du fichier."
+    },
+    "plante": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "emplacement": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "origine": {
+      "enum": [
+        "semis",
+        "achat",
+        "bouture",
+        "division",
+        "don"
+      ]
+    },
+    "debut": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "fin": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "statut": {
+      "enum": [
+        "en-cours",
+        "terminee",
+        "perdue"
+      ]
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^medias/"
+      },
+      "uniqueItems": true,
+      "description": "Chemins depuis la racine du dépôt."
+    }
+  },
+  "if": {
+    "properties": {
+      "statut": {
+        "const": "en-cours"
+      }
+    }
+  },
+  "then": {
+    "properties": {
+      "fin": {
+        "type": "null"
+      }
+    }
+  },
+  "else": {
+    "required": [
+      "fin"
+    ],
+    "properties": {
+      "fin": {
+        "type": "string",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      }
+    }
+  }
+}
