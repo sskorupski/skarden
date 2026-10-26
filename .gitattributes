@@ -1,0 +1,8 @@
+# Les photos passent par Git LFS : l'historique ne garde que leurs pointeurs.
+medias/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+medias/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
+medias/**/*.JPG filter=lfs diff=lfs merge=lfs -text
+medias/**/*.png filter=lfs diff=lfs merge=lfs -text
+medias/**/*.heic filter=lfs diff=lfs merge=lfs -text
+medias/**/*.HEIC filter=lfs diff=lfs merge=lfs -text
+medias/**/*.webp filter=lfs diff=lfs merge=lfs -text
