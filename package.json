@@ -9,7 +9,7 @@
   "scripts": {
     "verifier": "node outils/verifier.mjs",
     "verifier:lfs": "node outils/verifier-lfs.mjs",
-    "test": "node --test tests/"
+    "test": "node --test \"tests/*.test.mjs\""
   },
   "devDependencies": {
     "ajv": "^8.20.0",
