@@ -18,5 +18,5 @@
 
 ## Ce qui n'est pas ici
 
-- **Les décisions de format** — champs, valeurs autorisées, différence entre plante et culture, journal : le référentiel de cadrage [ssk-it/skarden-cadrage](https://github.com/ssk-it/skarden-cadrage). Le consulter par le skill `consulter-referentiel` avant de toucher à un schéma.
+- **Les décisions de format** — champs, valeurs autorisées, patron espèce, lot, installation et journal, plages de conditions et modes : le référentiel de cadrage [ssk-it/skarden-cadrage](https://github.com/ssk-it/skarden-cadrage). Le consulter par le skill `consulter-referentiel` avant de toucher à un schéma.
 - **L'interface** : [ssk-it/skarden-web](https://github.com/ssk-it/skarden-web).
