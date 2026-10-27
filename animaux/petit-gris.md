@@ -56,9 +56,18 @@ Entre 10 et 12 °C, les escargots se réveillent et se rendorment sans cesse : i
 - Chaque semaine : vérifier la température, l'humidité et les pontes.
 - Tous les 1 à 2 mois : renouveler le substrat, ou plus tôt en cas de mauvaise odeur ou de moisissure. Humidité juste : une poignée serrée tient sans goutter.
 
-## Alimentation et calcium
+## Régime et rations
 
-Végétaux frais et non traités : salade, chou, carotte, courgette, orties. Une farine spéciale héliciculture peut compléter. Os de seiche ou coquilles d'œufs broyées à disposition en permanence : le calcium est indispensable à la coquille et à la ponte. Arrêter toute nourriture pendant l'hibernation.
+**Régime : herbivore.**
+
+- **Aliments** : des végétaux frais et non traités (salade, chou, carotte, courgette, orties). Une farine spéciale héliciculture peut compléter.
+- **Calcium** : de l'os de seiche ou des coquilles d'œufs broyées, **à disposition en permanence**. Il est indispensable à la coquille et à la ponte.
+- **Rythme** : un repas chaque soir en période active. Les escargots mangent la nuit.
+- **Quantité** : le guide ne la chiffre pas. On donne de la nourriture fraîche chaque soir, et l'on retire le lendemain matin ce qui reste, pour éviter les moisissures. Des restes chaque matin disent qu'il faut donner moins.
+- **Selon la phase** :
+  - en octobre, en préparation, réduire la nourriture ;
+  - en dormance, ne plus rien donner une fois les escargots fermés par leur épiphragme ;
+  - au réveil, en mars-avril, reprendre l'alimentation après avoir remonté la température et l'humidité.
 
 ## Abris
 
