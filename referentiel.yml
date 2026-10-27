@@ -32,8 +32,6 @@ collections:
     schema: schemas/animal.schema.json
     liens:
       famille: familles
-      aliments.plantes: plantes
-      aliments.animaux: animaux
       procedures: procedures
 
   procedures:

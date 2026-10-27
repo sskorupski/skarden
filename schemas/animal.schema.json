@@ -69,18 +69,6 @@
         }
       }
     },
-    "aliments": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "plantes": {
-          "$ref": "socle.schema.json#/$defs/liens"
-        },
-        "animaux": {
-          "$ref": "socle.schema.json#/$defs/liens"
-        }
-      }
-    },
     "complements": {
       "type": "array",
       "items": {
