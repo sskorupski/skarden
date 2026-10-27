@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sskorupski/skarden/schemas/animal.schema.json",
+  "title": "Animal — ce qu'une espèce animale demande",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "nom",
+    "milieu",
+    "protection"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "socle.schema.json#/$defs/id"
+    },
+    "nom": {
+      "$ref": "socle.schema.json#/$defs/nom"
+    },
+    "nom_latin": {
+      "type": "string"
+    },
+    "famille": {
+      "$ref": "socle.schema.json#/$defs/lien"
+    },
+    "milieu": {
+      "enum": [
+        "terrestre",
+        "eau-douce",
+        "eau-salee"
+      ]
+    },
+    "protection": {
+      "enum": [
+        "aucune",
+        "encadree",
+        "protegee"
+      ],
+      "description": "Le détail de la réglementation s'écrit dans le corps de la fiche."
+    },
+    "plages": {
+      "$ref": "socle.schema.json#/$defs/plages"
+    },
+    "modes": {
+      "$ref": "socle.schema.json#/$defs/modes"
+    },
+    "densite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "min",
+        "max",
+        "unite"
+      ],
+      "properties": {
+        "min": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unite": {
+          "enum": [
+            "par-m2-sol",
+            "par-litre"
+          ]
+        }
+      }
+    },
+    "aliments": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "plantes": {
+          "$ref": "socle.schema.json#/$defs/liens"
+        },
+        "animaux": {
+          "$ref": "socle.schema.json#/$defs/liens"
+        }
+      }
+    },
+    "complements": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "calcium",
+          "farine-d-elevage",
+          "levure",
+          "spiruline",
+          "eau-verte"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "reproduction": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "enum": [
+            "oeufs",
+            "parthenogenese",
+            "cystes",
+            "vivipare"
+          ]
+        },
+        "fecondite": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "min",
+            "max"
+          ],
+          "properties": {
+            "min": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "max": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "description": "Descendants par adulte et par saison."
+        }
+      }
+    },
+    "stades": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "oeuf",
+          "cyste",
+          "nauplius",
+          "neonate",
+          "larve",
+          "nymphe",
+          "juvenile",
+          "adulte",
+          "imago"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "routine": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "soin",
+          "frequence"
+        ],
+        "properties": {
+          "soin": {
+            "enum": [
+              "brumisation",
+              "nourrissage",
+              "nettoyage",
+              "controle",
+              "renouvellement-substrat",
+              "changement-d-eau",
+              "aeration"
+            ]
+          },
+          "frequence": {
+            "enum": [
+              "quotidienne",
+              "hebdomadaire",
+              "mensuelle",
+              "bimestrielle",
+              "saisonniere"
+            ]
+          },
+          "phases": {
+            "type": "array",
+            "items": {
+              "$ref": "socle.schema.json#/$defs/phase"
+            },
+            "uniqueItems": true,
+            "description": "Sans phases, le soin vaut toute l'année."
+          }
+        }
+      },
+      "description": "Les soins qui reviennent : ils ne s'écrivent pas au journal."
+    },
+    "procedures": {
+      "$ref": "socle.schema.json#/$defs/liens"
+    },
+    "photos": {
+      "$ref": "socle.schema.json#/$defs/photos"
+    }
+  }
+}

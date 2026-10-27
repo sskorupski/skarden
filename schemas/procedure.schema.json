@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sskorupski/skarden/schemas/procedure.schema.json",
+  "title": "Procédure — une préparation réutilisable",
+  "description": "Le corps donne les étapes ; ce sont les espèces qui citent la procédure.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "nom"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "socle.schema.json#/$defs/id"
+    },
+    "nom": {
+      "$ref": "socle.schema.json#/$defs/nom"
+    },
+    "photos": {
+      "$ref": "socle.schema.json#/$defs/photos"
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sskorupski/skarden/schemas/installation.schema.json",
+  "title": "Installation — le contenant qui abrite un lot",
+  "description": "La capacité ne s'écrit pas : elle se calcule depuis la densité de l'espèce.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "nom",
+    "type",
+    "emplacement"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "socle.schema.json#/$defs/id"
+    },
+    "nom": {
+      "$ref": "socle.schema.json#/$defs/nom"
+    },
+    "type": {
+      "enum": [
+        "terrarium",
+        "aquarium",
+        "bac",
+        "seau",
+        "eclosoir",
+        "parc"
+      ]
+    },
+    "emplacement": {
+      "$ref": "socle.schema.json#/$defs/lien"
+    },
+    "dimensions_cm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "longueur",
+        "largeur",
+        "hauteur"
+      ],
+      "properties": {
+        "longueur": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "largeur": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "hauteur": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "volume_l": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Le volume utile, quand il diffère du produit des dimensions."
+    },
+    "photos": {
+      "$ref": "socle.schema.json#/$defs/photos"
+    }
+  }
+}

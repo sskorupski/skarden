@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sskorupski/skarden/schemas/elevage.schema.json",
+  "title": "Élevage — un animal, une installation, une période",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "animal",
+    "installation",
+    "debut",
+    "statut",
+    "origine"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "socle.schema.json#/$defs/id",
+      "description": "Commence par l'année du début : 2026-petit-gris-garage."
+    },
+    "animal": {
+      "$ref": "socle.schema.json#/$defs/lien"
+    },
+    "installation": {
+      "$ref": "socle.schema.json#/$defs/lien"
+    },
+    "origine": {
+      "enum": [
+        "achat",
+        "prelevement",
+        "don",
+        "souche"
+      ]
+    },
+    "elevage_parent": {
+      "$ref": "socle.schema.json#/$defs/lien",
+      "description": "Requis si l'origine est souche, interdit sinon."
+    },
+    "mode": {
+      "$ref": "socle.schema.json#/$defs/id",
+      "description": "L'un des modes de la fiche animal."
+    },
+    "effectif_cible": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "debut": {
+      "$ref": "socle.schema.json#/$defs/date"
+    },
+    "fin": {
+      "$ref": "socle.schema.json#/$defs/date_ou_vide"
+    },
+    "statut": {
+      "$ref": "socle.schema.json#/$defs/statut"
+    },
+    "photos": {
+      "$ref": "socle.schema.json#/$defs/photos"
+    }
+  }
+}

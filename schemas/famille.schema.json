@@ -1,25 +1,30 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/sskorupski/skarden/schemas/famille.schema.json",
-  "title": "Famille botanique",
+  "title": "Famille — botanique ou zoologique",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "id",
-    "nom"
+    "nom",
+    "regne"
   ],
   "properties": {
     "id": {
-      "type": "string",
-      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
-      "description": "Identifiant en kebab-case, égal au nom du fichier."
+      "$ref": "socle.schema.json#/$defs/id"
     },
     "nom": {
-      "type": "string",
-      "minLength": 1
+      "$ref": "socle.schema.json#/$defs/nom"
     },
     "nom_latin": {
       "type": "string"
+    },
+    "regne": {
+      "enum": [
+        "vegetal",
+        "animal"
+      ],
+      "description": "Une plante ne désigne qu'une famille végétale, un animal qu'une famille animale."
     }
   }
 }
