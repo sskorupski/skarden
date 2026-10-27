@@ -23,9 +23,6 @@ modes:
     phases:
       - { phase: activite, mois: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
 densite: { min: 100, max: 150, unite: par-m2-sol }
-aliments:
-  plantes: []
-  animaux: []
 complements: [calcium, farine-d-elevage]
 reproduction:
   mode: oeufs

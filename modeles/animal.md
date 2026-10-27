@@ -22,9 +22,6 @@ modes:
     phases:
       - { phase: activite, mois: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
 densite: { min: 100, max: 150, unite: par-m2-sol }
-aliments:
-  plantes: []
-  animaux: []
 complements: [calcium, farine-d-elevage]
 reproduction:
   mode: oeufs
@@ -39,4 +36,4 @@ procedures: [preparation-substrat-terre]
 photos: []
 ---
 
-Ce que l'espèce demande, et ce que j'en ai appris : réglementation du ramassage, abris, erreurs à ne pas refaire.
+Ce que l'espèce demande, et ce que j'en ai appris : réglementation du ramassage, alimentation (régime, aliments, quantité et rythme des repas), abris, erreurs à ne pas refaire.

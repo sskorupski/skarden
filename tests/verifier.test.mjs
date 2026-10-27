@@ -153,10 +153,11 @@ test("un animal sans protection est signalé", () => {
   unSeulDefaut(racine, ANIMAL, /protection/);
 });
 
-test("un aliment qui ne mène à aucune plante est signalé", () => {
+// L'alimentation s'écrit dans le corps de la fiche (cadrage 2026-003, décision 06) : aucun champ ne la porte.
+test("un animal qui porte un champ aliments est signalé", () => {
   const racine = referentielDesModeles();
-  remplacer(racine, ANIMAL, 'plantes: []', 'plantes: [salade]');
-  unSeulDefaut(racine, ANIMAL, /aliments\.plantes.*salade/);
+  remplacer(racine, ANIMAL, 'protection: encadree\n', 'protection: encadree\naliments:\n  plantes: [salade]\n');
+  unSeulDefaut(racine, ANIMAL, /aliments/);
 });
 
 test("une procédure citée qui n'existe pas est signalée", () => {
