@@ -4,13 +4,16 @@ schema_version: 1
 projet:
   nom: Skarden
   description: >
-    Ce que je cultive à la maison : une fiche par plante pour ce qu'elle
-    demande, une fiche par culture pour ce qui pousse réellement, et un journal
-    daté de ce qui s'y est passé.
+    Ce que je cultive et ce que j'élève à la maison : une fiche par espèce pour
+    ce qu'elle demande, une fiche par culture ou par élevage pour ce qui vit
+    réellement, une fiche par installation qui l'abrite, et un journal daté de
+    ce qui s'y est passé.
 
 # Chaque collection : son dossier, le schéma de son frontmatter, et les champs
 # qui désignent une fiche d'une autre collection par son `id`. Un chemin pointé
 # désigne un champ imbriqué ; un champ liste désigne une fiche par élément.
+# Les schémas reprennent par `$ref` les définitions communes de
+# `schemas/socle.schema.json`, qui n'est pas une collection.
 collections:
   familles:
     dossier: familles
@@ -24,9 +27,28 @@ collections:
       associations.favorables: plantes
       associations.defavorables: plantes
 
+  animaux:
+    dossier: animaux
+    schema: schemas/animal.schema.json
+    liens:
+      famille: familles
+      aliments.plantes: plantes
+      aliments.animaux: animaux
+      procedures: procedures
+
+  procedures:
+    dossier: procedures
+    schema: schemas/procedure.schema.json
+
   emplacements:
     dossier: emplacements
     schema: schemas/emplacement.schema.json
+
+  installations:
+    dossier: installations
+    schema: schemas/installation.schema.json
+    liens:
+      emplacement: emplacements
 
   cultures:
     dossier: cultures
@@ -34,6 +56,14 @@ collections:
     liens:
       plante: plantes
       emplacement: emplacements
+
+  elevages:
+    dossier: elevages
+    schema: schemas/elevage.schema.json
+    liens:
+      animal: animaux
+      installation: installations
+      elevage_parent: elevages
 
   # Le journal se range par année (`journal/2026/`) et n'a pas d'`id` :
   # une entrée se nomme d'après sa date (`2026-05-02-basilic-rempotage.md`).
@@ -43,3 +73,4 @@ collections:
     par_annee: true
     liens:
       culture: cultures
+      elevage: elevages

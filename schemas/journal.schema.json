@@ -1,47 +1,116 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/sskorupski/skarden/schemas/journal.schema.json",
-  "title": "Entrée du journal — un événement daté",
+  "title": "Entrée du journal — un événement daté d'une culture ou d'un élevage",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "date",
-    "culture",
     "evenement"
+  ],
+  "oneOf": [
+    {
+      "required": [
+        "culture"
+      ]
+    },
+    {
+      "required": [
+        "elevage"
+      ]
+    }
   ],
   "properties": {
     "date": {
-      "type": "string",
-      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      "$ref": "socle.schema.json#/$defs/date"
     },
     "culture": {
-      "type": "string",
-      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      "$ref": "socle.schema.json#/$defs/lien"
+    },
+    "elevage": {
+      "$ref": "socle.schema.json#/$defs/lien"
     },
     "evenement": {
-      "enum": [
-        "semis",
-        "repiquage",
-        "plantation",
-        "rempotage",
-        "taille",
-        "arrosage",
-        "fertilisation",
-        "traitement",
-        "floraison",
-        "recolte",
-        "observation",
-        "perte"
-      ]
+      "type": "string"
+    },
+    "effectif": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Le nombre d'individus, pour une entrée d'élevage."
     },
     "photos": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "pattern": "^medias/"
-      },
-      "uniqueItems": true,
-      "description": "Chemins depuis la racine du dépôt."
+      "$ref": "socle.schema.json#/$defs/photos"
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "elevage"
+        ],
+        "not": {
+          "required": [
+            "culture"
+          ]
+        }
+      },
+      "then": {
+        "properties": {
+          "evenement": {
+            "enum": [
+              "introduction",
+              "ponte",
+              "eclosion",
+              "comptage",
+              "renouvellement-substrat",
+              "changement-d-eau",
+              "mise-en-dormance",
+              "reveil",
+              "division",
+              "prelevement",
+              "traitement",
+              "observation",
+              "perte"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "culture"
+        ],
+        "not": {
+          "required": [
+            "elevage"
+          ]
+        }
+      },
+      "then": {
+        "properties": {
+          "evenement": {
+            "enum": [
+              "semis",
+              "repiquage",
+              "plantation",
+              "rempotage",
+              "taille",
+              "arrosage",
+              "fertilisation",
+              "traitement",
+              "floraison",
+              "recolte",
+              "observation",
+              "perte"
+            ]
+          },
+          "effectif": {
+            "not": {},
+            "description": "réservé aux entrées d'un élevage."
+          }
+        }
+      }
+    }
+  ]
 }

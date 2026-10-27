@@ -1,15 +1,18 @@
 // Vérifie le référentiel : chaque fiche a un frontmatter conforme au schéma de
 // sa collection, porte le nom de son id, ne désigne que des fiches et des
-// photos qui existent. Rend la liste des défauts ; vide, le référentiel est sain.
+// photos qui existent, et respecte les règles que son schéma n'exprime pas.
+// Rend la liste des défauts ; vide, le référentiel est sain.
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { basename, join, relative, sep } from 'node:path';
+import { basename, dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Ajv2020 from 'ajv/dist/2020.js';
 import { parse } from 'yaml';
+import { REGLES } from './regles.mjs';
 
 export function verifier(racine) {
   const config = parse(readFileSync(join(racine, 'referentiel.yml'), 'utf8'));
-  const ajv = new Ajv2020({ allErrors: true });
+  const ajv = new Ajv2020({ allErrors: true, verbose: true });
+  ajouterLesSchemas(ajv, racine, Object.values(config.collections));
   const defauts = [];
   const fiches = {};
   // Une fiche se désigne par le nom de son fichier, valide ou non : un défaut
@@ -17,7 +20,7 @@ export function verifier(racine) {
   const ids = {};
 
   for (const [nom, collection] of Object.entries(config.collections)) {
-    const valider = ajv.compile(JSON.parse(readFileSync(join(racine, collection.schema), 'utf8')));
+    const valider = ajv.getSchema(JSON.parse(readFileSync(join(racine, collection.schema), 'utf8')).$id);
     fiches[nom] = [];
     ids[nom] = new Set();
     for (const chemin of fichiersMarkdown(join(racine, collection.dossier))) {
@@ -30,7 +33,7 @@ export function verifier(racine) {
         continue;
       }
       if (!valider(donnees)) {
-        valider.errors.filter((e) => e.keyword !== 'if').forEach((e) => signaler(messageDeSchema(e)));
+        messagesDeSchema(valider.errors).forEach(signaler);
         continue;
       }
       if (collection.par_annee) verifierRangementAnnuel(fichier, donnees, signaler);
@@ -40,6 +43,12 @@ export function verifier(racine) {
       fiches[nom].push({ donnees, signaler });
     }
   }
+
+  // Les fiches valides de chaque collection, par id, pour les règles qui lisent
+  // la fiche désignée : le règne d'une famille, les modes d'un animal.
+  const valides = Object.fromEntries(Object.entries(fiches).map(
+    ([nom, liste]) => [nom, new Map(liste.map(({ donnees }) => [donnees.id, donnees]))],
+  ));
 
   for (const [nom, collection] of Object.entries(config.collections)) {
     for (const { donnees, signaler } of fiches[nom]) {
@@ -51,9 +60,20 @@ export function verifier(racine) {
       for (const photo of donnees.photos ?? []) {
         if (!existsSync(join(racine, photo))) signaler(`photos : « ${photo} » absente du dépôt.`);
       }
+      for (const regle of REGLES[nom] ?? []) regle(donnees, valides).forEach(signaler);
     }
   }
   return defauts;
+}
+
+// Un schéma en reprend d'autres par `$ref`, le socle d'abord : tous ceux des
+// dossiers de schémas sont connus d'Ajv avant qu'on en demande un.
+function ajouterLesSchemas(ajv, racine, collections) {
+  for (const dossier of new Set(collections.map((collection) => dirname(collection.schema)))) {
+    for (const nom of readdirSync(join(racine, dossier)).filter((nom) => nom.endsWith('.schema.json')).sort()) {
+      ajv.addSchema(JSON.parse(readFileSync(join(racine, dossier, nom), 'utf8')));
+    }
+  }
 }
 
 function fichiersMarkdown(dossier) {
@@ -85,8 +105,28 @@ function verifierRangementAnnuel(fichier, donnees, signaler) {
   }
 }
 
+// Un choix entre champs (`oneOf` ou `anyOf` dont chaque branche n'exige qu'un
+// champ) se dit en une phrase : l'échec de chacune de ses branches se tait.
+function messagesDeSchema(erreurs) {
+  const choix = erreurs.filter(estUnChoixDeChamps).map((erreur) => erreur.schemaPath);
+  return erreurs
+    .filter((erreur) => erreur.keyword !== 'if')
+    .filter((erreur) => !choix.some((chemin) => erreur.schemaPath.startsWith(`${chemin}/`)))
+    .map(messageDeSchema);
+}
+
+function estUnChoixDeChamps(erreur) {
+  return ['oneOf', 'anyOf'].includes(erreur.keyword)
+    && erreur.schema.every((branche) => Object.keys(branche).length === 1 && branche.required?.length === 1);
+}
+
 function messageDeSchema(erreur) {
   const champ = erreur.instancePath.slice(1).replaceAll('/', '.') || 'frontmatter';
+  if (estUnChoixDeChamps(erreur)) {
+    const champs = erreur.schema.map((branche) => branche.required[0]).join(', ');
+    return `${champ} : porte ${erreur.keyword === 'oneOf' ? 'exactement' : 'au moins'} un des champs ${champs}.`;
+  }
+  if (erreur.keyword === 'not' && erreur.parentSchema.description) return `${champ} : ${erreur.parentSchema.description}`;
   if (erreur.keyword === 'additionalProperties') return `champ inconnu : ${erreur.params.additionalProperty}.`;
   if (erreur.keyword === 'required') return `champ requis absent : ${erreur.params.missingProperty}.`;
   if (erreur.keyword === 'enum') return `${champ} : valeur hors de la liste (${erreur.params.allowedValues.join(', ')}).`;
