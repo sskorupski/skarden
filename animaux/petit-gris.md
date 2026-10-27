@@ -62,6 +62,7 @@ Entre 10 et 12 °C, les escargots se réveillent et se rendorment sans cesse : i
 
 - **Aliments** : des végétaux frais et non traités (salade, chou, carotte, courgette, orties). Une farine spéciale héliciculture peut compléter.
 - **Calcium** : de l'os de seiche ou des coquilles d'œufs broyées, **à disposition en permanence**. Il est indispensable à la coquille et à la ponte.
+  - Autre source possible : de la poudre de coquille d'huître. [Une étude sur l'escargot géant d'Afrique](https://revues.cirad.fr/index.php/cahiers-agricultures/article/view/29920) l'a éprouvée : son calcium est digéré à 84 %, et elle recommande d'en mettre 15 % dans l'alimentation des jeunes. Cette étude porte sur une autre espèce que le petit-gris.
 - **Rythme** : un repas chaque soir en période active. Les escargots mangent la nuit.
 - **Quantité** : le guide ne la chiffre pas. On donne de la nourriture fraîche chaque soir, et l'on retire le lendemain matin ce qui reste, pour éviter les moisissures. Des restes chaque matin disent qu'il faut donner moins.
 - **Selon la phase** :
