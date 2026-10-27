@@ -12,9 +12,6 @@ modes:
   - id: activite-continue
     phases:
       - { phase: activite, mois: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
-aliments:
-  plantes: []
-  animaux: []
 reproduction:
   mode: oeufs
 stades: [oeuf, larve, juvenile, adulte]
@@ -49,8 +46,6 @@ Les sources se recoupent sur 22 à 26 °C, et vont de 20 à 28 °C selon les aut
 - **Proies vivantes ou congelées** : nauplies d'artémias, moinas ou daphnies, vers de grindal. Seriously Fish en recommande chaque jour ; Fish Tank Advisor seulement quelques fois par semaine, en complément d'un aliment sec.
 - **Aliment sec** : des flocons ou des granulés fins, qu'il accepte s'ils sont assez petits.
 - **Quantité** : aucune des sources consultées ne la chiffre pour un adulte. La pratique courante en aquariophilie est de ne donner que ce que le groupe mange en quelques minutes, et de retirer les restes. Une étude sur les alevins d'une espèce voisine, *Kryptopterus lais*, a obtenu la meilleure croissance avec quatre repas par jour, pour 10 % du poids du corps par jour. Ces chiffres valent pour des alevins, pas pour des adultes.
-
-Les fiches des proies n'existent pas encore. Quand elles existeront, leurs identifiants iront dans `aliments.animaux`.
 
 ## Reproduction
 
