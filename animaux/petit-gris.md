@@ -34,7 +34,6 @@ routine:
   - { soin: nettoyage, frequence: quotidienne, phases: [activite, reproduction] }
   - { soin: controle, frequence: hebdomadaire }
   - { soin: nettoyage, frequence: hebdomadaire }
-  - { soin: renouvellement-substrat, frequence: bimestrielle }
 procedures: [mise-en-place-aquarium-escargots, preparation-substrat-terre]
 photos: []
 ---
