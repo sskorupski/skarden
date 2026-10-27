@@ -49,6 +49,18 @@ Entre 10 et 12 °C, les escargots se réveillent et se rendorment sans cesse : i
 - **Hibernation** : substrat juste frais, plus de brumisation, plus de nourriture une fois les escargots fermés par leur épiphragme. Au réveil, en mars-avril, remonter progressivement la température et l'humidité, puis reprendre l'alimentation. En octobre, réduire la nourriture et l'humidité, et renouveler le substrat.
 - **Activité continue** : chauffer et éclairer l'installation (voir sa fiche).
 
+## Éclairage
+
+Ce qui compte est la durée du jour, pas l'intensité. Les escargots sont surtout actifs la nuit et n'ont pas besoin d'UV : la lumière leur sert de repère saisonnier, pour rester actifs et se reproduire.
+
+- **Activité normale** : 12 à 14 h de lumière, par exemple de 8 h à 21 h.
+- **Pour stimuler la ponte** : jusqu'à 16 h. Les jours longs déclenchent la reproduction : on peut allonger progressivement au printemps.
+- **La nuit** : vraiment noire, car c'est là qu'ils mangent et se déplacent.
+- **Les abris** : toujours en place, pour qu'ils puissent se mettre à l'ombre en journée.
+- **En hibernation** : pas d'éclairage. La pénombre du garage suffit, et la lumière risquerait de les réveiller.
+
+Le matériel et sa pose sont décrits dans la fiche de l'aquarium du garage.
+
 ## Routine
 
 - **Le soir** : brumiser sans laisser d'eau stagnante, et poser des végétaux frais sur une coupelle, jamais à même le substrat. Au chaud, la terre sèche plus vite : brumiser plus souvent.
@@ -79,7 +91,7 @@ Planches, tuiles ou feuilles de chou, pour se cacher le jour.
 
 ## Reproduction
 
-La ponte demande 18 à 22 °C, 12 à 14 h de lumière par jour et un substrat meuble de 8 à 10 cm. Chaque adulte peut pondre 80 à 100 œufs : sans gestion, 100 escargots deviennent plusieurs milliers de jeunes en une saison. Pour rester à une centaine, agrandir (un parc d'engraissement séparé de quelques m² pour les jeunes) ou stabiliser (retirer les pontes au fur et à mesure).
+La ponte demande 18 à 22 °C, 12 à 14 h de lumière par jour, et jusqu'à 16 h pour la stimuler (voir Éclairage), ainsi qu'un substrat meuble de 8 à 10 cm. Chaque adulte peut pondre 80 à 100 œufs : sans gestion, 100 escargots deviennent plusieurs milliers de jeunes en une saison. Pour rester à une centaine, agrandir (un parc d'engraissement séparé de quelques m² pour les jeunes) ou stabiliser (retirer les pontes au fur et à mesure).
 
 ## Substrat
 
