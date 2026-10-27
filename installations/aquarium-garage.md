@@ -9,7 +9,26 @@ photos: []
 
 Environ 0,54 m² au sol et 1,2 m² de parois, que les escargots utilisent en grimpant. Après 8 à 10 cm de substrat, il reste environ 30 cm de hauteur utile.
 
+## Structure
+
+De bas en haut, selon la procédure de mise en place d'un aquarium à escargots :
+
+1. 2 à 3 cm de billes d'argile, pour le drainage ;
+2. une moustiquaire de séparation ;
+3. le substrat : terreau sans engrais et fibre de coco, avec du calcaire broyé ou des coquilles d'œufs ;
+4. une litière de feuilles mortes de chêne ou de hêtre en surface.
+
+## Équipe de nettoyage
+
+- **Collemboles** : contre les moisissures.
+- **Cloportes** d'une petite espèce (*Porcellionides pruinosus* ou *Trichorhina tomentosa*) : pour les déjections et les restes.
+- **En option** : des vers de compost ou des vers grindal dans le substrat.
+
 ## Couvercle et aération
+
+- **Couvercle grillagé**, au moins en partie.
+- **Ventilation croisée** : une entrée d'air basse d'un côté, une sortie haute de l'autre.
+- **En option** : un petit ventilateur de PC à faible vitesse, sur programmateur (par exemple 15 minutes par heure), qui brasse l'air au-dessus du substrat et jamais dessous.
 
 Un couvercle tout en verre enferme l'humidité : condensation, moisissures, odeur d'ammoniac. Le bac se couvre de plaques de verre de 1 cm, en gardant sur toute la longueur une bande de moustiquaire fine de 10 à 15 cm, coincée sous le bord des plaques. Les mailles doivent être fines : les juvéniles passent dans une fente de 2 à 3 mm.
 
@@ -28,3 +47,8 @@ Isoler d'abord : sans isolation, le bac perd de l'ordre de 80 à 100 W ; isolé,
 5. Réglette LED sur minuterie, 12 à 14 h par jour.
 
 Budget indicatif avec le câble existant : environ 60 à 90 €. À éviter : les lampes chauffantes, qui dessèchent tout, et le chauffage par le dessous, qui sèche le substrat et gêne la ponte.
+
+## À surveiller
+
+- **La température du garage en hiver**, qui ralentit tout l'écosystème du bac.
+- **Les odeurs ou les moisissures persistantes** : elles signalent un excès de nourriture ou d'humidité, ou un manque d'air.

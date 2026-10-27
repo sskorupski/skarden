@@ -33,8 +33,9 @@ routine:
   - { soin: nourrissage, frequence: quotidienne, phases: [activite, reproduction] }
   - { soin: nettoyage, frequence: quotidienne, phases: [activite, reproduction] }
   - { soin: controle, frequence: hebdomadaire }
+  - { soin: nettoyage, frequence: hebdomadaire }
   - { soin: renouvellement-substrat, frequence: bimestrielle }
-procedures: [preparation-substrat-terre]
+procedures: [mise-en-place-aquarium-escargots, preparation-substrat-terre]
 photos: []
 ---
 
@@ -51,10 +52,13 @@ Entre 10 et 12 °C, les escargots se réveillent et se rendorment sans cesse : i
 
 ## Routine
 
-- Le soir : brumiser sans laisser d'eau stagnante, et donner des végétaux frais. Au chaud, la terre sèche plus vite : brumiser plus souvent.
-- Le matin : retirer les restes de la veille, pour éviter les moisissures.
-- Chaque semaine : vérifier la température, l'humidité et les pontes.
-- Tous les 1 à 2 mois : renouveler le substrat, ou plus tôt en cas de mauvaise odeur ou de moisissure. Humidité juste : une poignée serrée tient sans goutter.
+- **Le soir** : brumiser sans laisser d'eau stagnante, et poser des végétaux frais sur une coupelle, jamais à même le substrat. Au chaud, la terre sèche plus vite : brumiser plus souvent.
+- **Tous les jours ou tous les deux jours** : retirer les restes, pour éviter les moisissures.
+- **En permanence** : un substrat humide mais jamais détrempé. Une poignée pressée ne doit pas goutter.
+- **Chaque semaine** :
+  - vérifier la température, l'humidité et les pontes ;
+  - nettoyer les parois et retirer les déjections visibles.
+- **Au besoin** : remplacer environ un tiers du substrat, en surface. L'ancien sert d'amendement pour les plantes.
 
 ## Régime et rations
 
@@ -64,7 +68,7 @@ Entre 10 et 12 °C, les escargots se réveillent et se rendorment sans cesse : i
 - **Calcium** : de l'os de seiche ou des coquilles d'œufs broyées, **à disposition en permanence**. Il est indispensable à la coquille et à la ponte.
   - Autre source possible : de la poudre de coquille d'huître. [Une étude sur l'escargot géant d'Afrique](https://revues.cirad.fr/index.php/cahiers-agricultures/article/view/29920) l'a éprouvée : son calcium est digéré à 84 %, et elle recommande d'en mettre 15 % dans l'alimentation des jeunes. Cette étude porte sur une autre espèce que le petit-gris.
 - **Rythme** : un repas chaque soir en période active. Les escargots mangent la nuit.
-- **Quantité** : le guide ne la chiffre pas. On donne de la nourriture fraîche chaque soir, et l'on retire le lendemain matin ce qui reste, pour éviter les moisissures. Des restes chaque matin disent qu'il faut donner moins.
+- **Quantité** : le guide ne la chiffre pas. On donne de la nourriture fraîche chaque soir, **toujours sur une coupelle, jamais à même le substrat**, et l'on retire les restes tous les jours ou tous les deux jours, pour éviter les moisissures. Des restes chaque matin disent qu'il faut donner moins.
 - **Selon la phase** :
   - en octobre, en préparation, réduire la nourriture ;
   - en dormance, ne plus rien donner une fois les escargots fermés par leur épiphragme ;
@@ -80,4 +84,4 @@ La ponte demande 18 à 22 °C, 12 à 14 h de lumière par jour et un substrat me
 
 ## Substrat
 
-Terre du jardin sur 8 à 10 cm, préparée selon la procédure. Jamais de terre ayant reçu des anti-limaces : le métaldéhyde est mortel pour eux.
+La structure du bac (drainage, séparation, substrat, litière) et le mélange du substrat sont décrits dans la procédure de mise en place d'un aquarium à escargots. La terre du jardin en est une alternative, préparée selon sa propre procédure. Jamais de terre ayant reçu des anti-limaces : le métaldéhyde est mortel pour eux.

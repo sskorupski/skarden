@@ -45,6 +45,7 @@ Les sources se recoupent sur 22 à 26 °C, et vont de 20 à 28 °C selon les aut
 
 - **Proies vivantes ou congelées** : nauplies d'artémias, moinas ou daphnies, vers de grindal. Seriously Fish en recommande chaque jour ; Fish Tank Advisor seulement quelques fois par semaine, en complément d'un aliment sec.
 - **Aliment sec** : des flocons ou des granulés fins, qu'il accepte s'ils sont assez petits.
+- **Vers grindal** : je les élève dans une boîte à part, sur de la fibre de coco humide, avec des flocons d'avoine. En garder une boîte de secours dans la maison au cas où le garage deviendrait trop froid.
 - **Quantité** : aucune des sources consultées ne la chiffre pour un adulte. La pratique courante en aquariophilie est de ne donner que ce que le groupe mange en quelques minutes, et de retirer les restes. Une étude sur les alevins d'une espèce voisine, *Kryptopterus lais*, a obtenu la meilleure croissance avec quatre repas par jour, pour 10 % du poids du corps par jour. Ces chiffres valent pour des alevins, pas pour des adultes.
 
 ## Reproduction
