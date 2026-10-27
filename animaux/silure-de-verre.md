@@ -42,9 +42,15 @@ C'est un poisson grégaire, qui pâlit et se cache s'il est seul ou en trop peti
 
 Les sources se recoupent sur 22 à 26 °C, et vont de 20 à 28 °C selon les auteurs. L'eau est douce à moyennement dure (environ 1 à 12 °dGH) ; les sources donnent un pH de 4 à 7,5, et se recoupent sur 6 à 7.
 
-## Alimentation
+## Régime et rations
 
-Prédateur de zooplancton et de petits invertébrés. Il accepte les aliments secs de petite taille, mais il lui faut chaque jour de petites proies vivantes ou congelées : nauplies d'artémias, moinas ou daphnies, vers de grindal. Les fiches de ces proies n'existent pas encore : quand elles existeront, leurs identifiants iront dans `aliments.animaux`.
+**Régime : carnivore, mangeur de zooplancton.** Dans la nature, il chasse le zooplancton et de petits invertébrés en pleine eau.
+
+- **Proies vivantes ou congelées** : nauplies d'artémias, moinas ou daphnies, vers de grindal. Seriously Fish en recommande chaque jour ; Fish Tank Advisor seulement quelques fois par semaine, en complément d'un aliment sec.
+- **Aliment sec** : des flocons ou des granulés fins, qu'il accepte s'ils sont assez petits.
+- **Quantité** : aucune des sources consultées ne la chiffre pour un adulte. La pratique courante en aquariophilie est de ne donner que ce que le groupe mange en quelques minutes, et de retirer les restes. Une étude sur les alevins d'une espèce voisine, *Kryptopterus lais*, a obtenu la meilleure croissance avec quatre repas par jour, pour 10 % du poids du corps par jour. Ces chiffres valent pour des alevins, pas pour des adultes.
+
+Les fiches des proies n'existent pas encore. Quand elles existeront, leurs identifiants iront dans `aliments.animaux`.
 
 ## Reproduction
 
@@ -54,4 +60,6 @@ Elle n'est pas documentée en captivité. Il mange les œufs et les alevins.
 
 - [Seriously Fish, *Kryptopterus vitreolus*](https://seriouslyfish.com/species/kryptopterus-vitreolus)
 - [FishBase, *Kryptopterus vitreolus*](https://www.fishbase.se/summary/67132)
+- [Fish Tank Advisor, *Glass Catfish: Complete Care Guide*](https://fishtankadvisor.com/?p=4430)
+- [Étude sur l'alevinage de *Kryptopterus lais* (fréquence des repas)](https://ejournal-balitbang.kkp.go.id/index.php/ma/article/view/18176)
 - [Garnelio, *Kryptopterus vitreolus*](https://www.garnelio.de/en/indian-glass-catfish-kryptopterus-vitreolus-bicirrhis)
