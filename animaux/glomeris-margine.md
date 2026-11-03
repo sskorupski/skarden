@@ -26,6 +26,10 @@ Un mille-pattes court et bombé, de 7 à 20 mm, qui s'enroule en boule quand on 
 
 Aucune des sources consultées ne lui donne de statut de protection.
 
+## Chez moi
+
+Mis dans l'aquarium du garage pour rejoindre l'équipe de nettoyage, avec les collemboles et les cloportes : il y mange la litière de feuilles et le bois en décomposition. C'est un essai. Les sources consultées ne disent rien de sa cohabitation avec les escargots. Le bac, chauffé à 18-20 °C pour le petit-gris en activité continue, est dans sa plage.
+
 ## Conditions
 
 - **Température** : les éleveurs le tiennent à température ambiante, au plus frais de la pièce, autour de 20 à 21 °C ; la fiche retient 18 à 21 °C. Il craint la chaleur de l'été et le froid prolongé : ne jamais le laisser geler. Il est plus actif la nuit.
