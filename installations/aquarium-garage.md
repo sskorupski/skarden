@@ -43,21 +43,19 @@ Un couvercle tout en verre enferme l'humidité : condensation, moisissures, odeu
 
 La durée d'éclairage selon la saison est dans la fiche du petit-gris. En hibernation, on n'éclaire pas.
 
-## Hors-gel (hibernation)
+## Chauffage
 
-Le câble antigel de 2 m (25 W/m), enroulé à l'extérieur, contre la vitre du bas. S'il a un boîtier thermostat intégré, il se coupe vers 10 à 13 °C et ne sert qu'en hors-gel.
+Le chauffage et le hors-gel passent par le régulateur ssk-terrarium, dont le matériel et les règles sont posés dans son [cadrage](https://ssk-canon.s3-website.fr-par.scw.cloud/ssk-it/ssk-terrarium-cadrage/cadrages/2026-001).
 
-## Chauffage (activité continue)
+1. **Isoler d'abord** : polystyrène extrudé de 2 à 3 cm sous le fond, à l'arrière et sur les deux petits côtés ; la façade reste visible. Isolé, le bac perd de l'ordre de 7 W par degré d'écart avec le garage : tenir 19 °C dans un garage à 11 °C demande environ 55 à 65 W.
+2. **Deux câbles chauffants de terrarium, sans thermostat**, soit 75 W : 6 m de 50 W sur la vitre arrière, en allers-retours espacés d'environ 6 cm, et 4,5 m de 25 W sur une vitre latérale, espacés d'environ 4 cm. Collés à l'extérieur au ruban aluminium, sans jamais se croiser, entre la vitre et l'isolant. La vitre latérale sans câble est le côté frais.
+3. **Le régulateur** mesure l'air et commande les câbles par un relais : 19 °C en activité continue, 4 à 6 °C en hibernation, rien en maintenance.
+4. **Un limiteur indépendant**, un thermostat Exo Terra réglé à 24 °C, en série des câbles : il coupe même si le régulateur se bloque.
+5. **À la mise en service** : mesurer la vitre côté intérieur, là où se posent les escargots, pour vérifier qu'aucune bande n'y est trop chaude.
 
-Isoler d'abord : sans isolation, le bac perd de l'ordre de 80 à 100 W ; isolé, 30 à 50 W suffisent pour gagner 8 °C.
+**Le câble antigel existant ne sert plus** : son thermostat intégré ne l'allume que vers 3 à 5 °C, ce qui ne tient ni 19 °C ni le hors-gel d'un bac posé dans un garage à 10-12 °C.
 
-1. Polystyrène extrudé de 2 à 3 cm sous le fond, à l'arrière et sur les deux petits côtés ; la façade reste visible.
-2. Câble chauffant de terrarium de 50 W, ou deux tapis de 20 à 25 W, contre la paroi arrière, entre la vitre et l'isolant. Ne chauffer que la moitié du bac, pour avoir un côté chaud et un côté frais. Le câble antigel sans boîtier convient aussi, branché sur un thermostat externe, toujours à l'extérieur du bac.
-3. Thermostat de terrariophilie à sonde, idéalement à variation de puissance. Sonde dans le bac, côté chaud, à mi-hauteur, réglée à 19 °C.
-4. Thermo-hygromètre digital côté frais. Cibles : 18 à 20 °C et 75 à 90 % d'humidité.
-5. Réglette LED sur minuterie, 12 à 14 h par jour (voir Éclairage).
-
-Budget indicatif avec le câble existant : environ 60 à 90 €. À éviter : les lampes chauffantes, qui dessèchent tout, et le chauffage par le dessous, qui sèche le substrat et gêne la ponte.
+En hibernation, le garage reste au-dessus du hors-gel : les câbles ne chauffent qu'en cas de vrai froid. À éviter : les lampes chauffantes, qui dessèchent tout, et le chauffage par le dessous, qui sèche le substrat et gêne la ponte.
 
 ## À surveiller
 
