@@ -23,6 +23,7 @@ De bas en haut, selon la procédure de mise en place d'un aquarium à escargots 
 - **Collemboles** : contre les moisissures.
 - **Cloportes** d'une petite espèce (*Porcellionides pruinosus* ou *Trichorhina tomentosa*) : pour les déjections et les restes.
 - **Gloméris marginé**, à l'essai : pour la litière de feuilles et le bois en décomposition.
+- **Iule du compost**, à l'essai : pour la litière et les débris végétaux. Les mille-pattes peuvent manger les pontes d'escargot : surveiller les œufs.
 - **En option** : des vers de compost ou des vers grindal dans le substrat.
 
 ## Couvercle et aération
