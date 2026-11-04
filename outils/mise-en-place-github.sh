@@ -2,7 +2,8 @@
 # Crée le dépôt public sskorupski/skarden sur GitHub, y pousse main, et pose ses
 # réglages : suppression des branches fusionnées, règle de main, et ce dont
 # dépend une photo postée depuis le site — Git LFS actif, fusion automatique
-# permise (cadrage 2026-006 de ssk-it/skarden-cadrage).
+# permise (cadrage 2026-006 de ssk-it/skarden-cadrage). LFS ne se repose que
+# sur un dépôt d'organisation : ailleurs, il est seulement vérifié.
 #
 # Relançable : un dépôt déjà créé n'est pas recréé, un réglage déjà posé est
 # reposé à l'identique. S'appuie sur la session `gh` déjà ouverte ; aucun
@@ -69,9 +70,13 @@ echo "Contrôles requis sur main : $(gh api "repos/$DEPOT/rules/branches/main" \
 
 # Une photo postée depuis le site passe par LFS, et sa demande de fusion se
 # fusionne seule une fois les contrôles verts.
-# GitHub active LFS d'office, et aucune route ne lit son état : le reposer est
-# sans effet s'il est déjà actif. La sonde plus bas dit ce qu'il en est.
-if confirmer "Activer Git LFS sur $DEPOT (PUT repos/$DEPOT/lfs) ?"; then
+# GitHub active LFS d'office, et aucune route ne lit son état : la sonde plus
+# bas dit ce qu'il en est. La route qui le réactive ne sert qu'un dépôt
+# d'organisation : pour celui d'un compte personnel, elle répond 404 (mesuré le
+# 2026-11-04 sur sskorupski/skarden, jeton `repo`, administrateur).
+if [[ "$(gh api "repos/$DEPOT" -q .owner.type)" != "Organization" ]]; then
+  echo "Git LFS : pas de route pour le réactiver sur le dépôt d'un compte personnel, la sonde le vérifie."
+elif confirmer "Activer Git LFS sur $DEPOT (PUT repos/$DEPOT/lfs) ?"; then
   gh api -X PUT "repos/$DEPOT/lfs" >/dev/null
 fi
 if [[ "$(gh api "repos/$DEPOT" -q .allow_auto_merge)" == "true" ]]; then

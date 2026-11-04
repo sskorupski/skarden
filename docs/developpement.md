@@ -42,7 +42,7 @@ Une fiche désigne les autres par leur `id` : écrire d'abord celles qu'elle dé
 
 Depuis la page d'une fiche, sur [skarden-web](https://github.com/ssk-it/skarden-web), avec un jeton d'écriture pour ce dépôt : le site range la photo sous `medias/<collection>/`, l'ajoute au champ `photos` de la fiche, et commite le tout sur une branche `photos/<fichier>-<instant>` partie de `main`. Le navigateur ne peut pas déposer un objet LFS : la photo arrive telle quelle, et l'Action [`photos-en-lfs.yml`](../.github/workflows/photos-en-lfs.yml) la convertit en pointeur et repousse la branche. Le site ouvre ensuite la demande de fusion, que les contrôles vérifient comme toute autre, et en demande la fusion automatique. Le détail, et ce que le site lit pour savoir où en est la conversion : [pratiques.md](pratiques.md#une-photo-postée-depuis-le-site).
 
-L'envoi dépend de deux réglages du dépôt que rien n'y montre, Git LFS actif et la fusion automatique permise. `bash outils/mise-en-place-github.sh` les pose, chaque écriture confirmée, et les vérifie de l'extérieur.
+L'envoi dépend de deux réglages du dépôt que rien n'y montre, Git LFS actif et la fusion automatique permise. `bash outils/mise-en-place-github.sh` permet la fusion automatique, chaque écriture confirmée, et vérifie les deux de l'extérieur. LFS, actif d'office, ne se réactive par l'API que sur un dépôt d'organisation : sur celui d'un compte personnel, comme celui-ci, le script le vérifie seulement.
 
 Rien à faire sur un poste. Une branche `photos/…` qui reste ouverte est un envoi arrêté : le lien de son Action dit pourquoi.
 
