@@ -13,6 +13,7 @@
 | Pour… | Ouvrir |
 | --- | --- |
 | Ajouter une fiche, une photo | [developpement.md](developpement.md#ajouter-une-fiche) |
+| Comprendre le chemin d'une photo postée depuis le site | [pratiques.md](pratiques.md#une-photo-postée-depuis-le-site) |
 | Ajouter un champ ou une collection | [pratiques.md](pratiques.md#faire-évoluer-le-format) |
 | Nommer une fiche | [conventions.md](conventions.md#fiches) |
 
