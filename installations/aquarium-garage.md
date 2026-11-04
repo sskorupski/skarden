@@ -4,7 +4,7 @@ nom: Aquarium du garage
 type: aquarium
 emplacement: garage
 dimensions_cm: { longueur: 96, largeur: 56, hauteur: 40 }
-photos: []
+photos: [medias/installations/aquarium-garage-20261104-1919-1.jpg]
 ---
 
 Environ 0,54 m² au sol et 1,2 m² de parois, que les escargots utilisent en grimpant. Après 8 à 10 cm de substrat, il reste environ 30 cm de hauteur utile.
