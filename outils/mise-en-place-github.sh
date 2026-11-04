@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
-# Crée le dépôt public sskorupski/skarden sur GitHub, y pousse main, et pose ses réglages.
+# Crée le dépôt public sskorupski/skarden sur GitHub, y pousse main, et pose ses
+# réglages : suppression des branches fusionnées, règle de main, et ce dont
+# dépend une photo postée depuis le site — Git LFS actif, fusion automatique
+# permise (cadrage 2026-006 de ssk-it/skarden-cadrage). LFS ne se repose que
+# sur un dépôt d'organisation : ailleurs, il est seulement vérifié.
 #
 # Relançable : un dépôt déjà créé n'est pas recréé, un réglage déjà posé est
 # reposé à l'identique. S'appuie sur la session `gh` déjà ouverte ; aucun
-# secret n'est demandé ni affiché.
+# secret n'est demandé ni affiché. Le jeton de cette session ne sert qu'à la
+# sonde LFS, passé à curl par un descripteur, jamais en argument.
 set -euo pipefail
 
 DEPOT="sskorupski/skarden"
@@ -62,4 +67,37 @@ elif confirmer "Les règles « $REGLES_NOM » de $DEPOT diffèrent : les remettr
 fi
 echo "Contrôles requis sur main : $(gh api "repos/$DEPOT/rules/branches/main" \
   --jq '[.[] | select(.type == "required_status_checks") | .parameters.required_status_checks[].context] | join(", ")')"
+
+# Une photo postée depuis le site passe par LFS, et sa demande de fusion se
+# fusionne seule une fois les contrôles verts.
+# GitHub active LFS d'office, et aucune route ne lit son état : la sonde plus
+# bas dit ce qu'il en est. La route qui le réactive ne sert qu'un dépôt
+# d'organisation : pour celui d'un compte personnel, elle répond 404 (mesuré le
+# 2026-11-04 sur sskorupski/skarden, jeton `repo`, administrateur).
+if [[ "$(gh api "repos/$DEPOT" -q .owner.type)" != "Organization" ]]; then
+  echo "Git LFS : pas de route pour le réactiver sur le dépôt d'un compte personnel, la sonde le vérifie."
+elif confirmer "Activer Git LFS sur $DEPOT (PUT repos/$DEPOT/lfs) ?"; then
+  gh api -X PUT "repos/$DEPOT/lfs" >/dev/null
+fi
+if [[ "$(gh api "repos/$DEPOT" -q .allow_auto_merge)" == "true" ]]; then
+  echo "Fusion automatique déjà permise."
+elif confirmer "Permettre la fusion automatique des demandes de fusion de $DEPOT ?"; then
+  gh repo edit "$DEPOT" --enable-auto-merge
+fi
+
+# Vérifié de l'extérieur. La fusion automatique, relue par l'API.
+echo "allow_auto_merge : $(gh api "repos/$DEPOT" -q .allow_auto_merge)"
+# LFS, par une requête batch « upload » pour un objet fictif, jamais envoyé : un
+# dépôt où LFS reçoit rend une action « upload ». Sa réponse porte un en-tête
+# signé : seul jq la lit, et n'en rend que la présence de l'action.
+OID="$(printf 'skarden : sonde LFS %s' "$(date +%s)" | shasum -a 256 | cut -d' ' -f1)"
+JETON="$(gh auth token)"
+LFS_RECOIT="$(curl -sSf -K <(printf 'user = "x-access-token:%s"\n' "$JETON") \
+  -H 'Accept: application/vnd.git-lfs+json' -H 'Content-Type: application/vnd.git-lfs+json' \
+  --data "{\"operation\":\"upload\",\"transfers\":[\"basic\"],\"objects\":[{\"oid\":\"$OID\",\"size\":1}]}" \
+  "https://github.com/$DEPOT.git/info/lfs/objects/batch" \
+  | jq '.objects[0].actions.upload != null')" || LFS_RECOIT="injoignable"
+unset JETON
+echo "Git LFS reçoit un envoi : $LFS_RECOIT"
 echo "Réglages posés sur $DEPOT."
+[[ "$LFS_RECOIT" == "true" ]] || { echo "Git LFS ne reçoit pas d'envoi sur $DEPOT : une photo postée depuis le site ne pourrait pas être convertie." >&2; exit 1; }

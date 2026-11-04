@@ -1,0 +1,50 @@
+name: Photos en LFS
+
+# Le site commite une photo telle quelle sur une branche photos/…, l'API LFS
+# refusant le navigateur. Ce workflow la convertit en pointeur LFS et repousse la
+# branche, avant que le site n'ouvre la demande de fusion (INV-3). Le contrat que
+# le site lit est dans docs/pratiques.md, « Une photo postée depuis le site ».
+#
+# La poussée faite avec le jeton des Actions ne déclenche aucun workflow : la
+# conversion ne se relance pas sur elle-même. Une poussée qui n'a rien à convertir
+# n'est pas repoussée.
+
+on:
+  push:
+    branches: ['photos/**']
+
+# Dépôt public d'un compte personnel : les runners de GitHub, comme les contrôles.
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  convertir:
+    name: Photos converties en pointeurs LFS
+    # La suppression d'une branche est aussi une poussée : rien à convertir.
+    if: ${{ !github.event.deleted }}
+    runs-on: ubuntu-latest
+    # Sa seule écriture : la poussée forcée de la branche convertie.
+    permissions:
+      contents: write
+    env:
+      # Les objets LFS déjà en place ne servent pas à la conversion.
+      GIT_LFS_SKIP_SMUDGE: '1'
+    steps:
+      # Toute l'histoire : la conversion ne réécrit que les commits absents de origin/main.
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+
+      - name: Convertir les photos et repousser la branche
+        shell: bash
+        env:
+          BRANCHE: ${{ github.ref_name }}
+        run: node outils/photos-en-lfs.mjs "$BRANCHE" | tee -a "$GITHUB_STEP_SUMMARY"
