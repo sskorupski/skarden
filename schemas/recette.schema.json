@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sskorupski/skarden/schemas/recette.schema.json",
+  "title": "Recette — ce qu'une préparation demande",
+  "description": "Une variante est une recette complète qui désigne sa source par derive_de.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "nom",
+    "categorie",
+    "version",
+    "ingredients",
+    "phases"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "socle.schema.json#/$defs/id"
+    },
+    "nom": {
+      "$ref": "socle.schema.json#/$defs/nom"
+    },
+    "categorie": {
+      "enum": [
+        "liqueur",
+        "sirop",
+        "conserve",
+        "fermentation",
+        "autre"
+      ]
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Augmente de 1 à chaque changement des ingrédients, de leurs quantités ou des phases."
+    },
+    "derive_de": {
+      "$ref": "socle.schema.json#/$defs/lien",
+      "description": "La recette dont celle-ci est une variante."
+    },
+    "rendement": {
+      "$ref": "socle.schema.json#/$defs/quantite"
+    },
+    "sources": {
+      "$ref": "socle.schema.json#/$defs/textes"
+    },
+    "ingredients": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ingredient",
+          "quantite",
+          "unite"
+        ],
+        "properties": {
+          "ingredient": {
+            "$ref": "socle.schema.json#/$defs/id",
+            "description": "Un nom libre en kebab-case, qui ne désigne aucune fiche ; unique dans la recette."
+          },
+          "quantite": {
+            "$ref": "socle.schema.json#/$defs/nombre_positif"
+          },
+          "unite": {
+            "$ref": "socle.schema.json#/$defs/unite"
+          },
+          "conservation": {
+            "$ref": "socle.schema.json#/$defs/conservation"
+          },
+          "note": {
+            "$ref": "socle.schema.json#/$defs/texte"
+          },
+          "optionnel": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "phases": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Dans l'ordre où on les exécute.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "libelle"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "socle.schema.json#/$defs/id"
+          },
+          "libelle": {
+            "$ref": "socle.schema.json#/$defs/texte"
+          },
+          "duree_cible": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "min",
+              "max"
+            ],
+            "properties": {
+              "min": {
+                "$ref": "socle.schema.json#/$defs/duree"
+              },
+              "max": {
+                "$ref": "socle.schema.json#/$defs/duree"
+              }
+            }
+          },
+          "temperature_c": {
+            "$ref": "socle.schema.json#/$defs/plage_de_temperature"
+          },
+          "contenant_categorie": {
+            "$ref": "socle.schema.json#/$defs/categorie_de_contenant"
+          },
+          "conditions": {
+            "$ref": "socle.schema.json#/$defs/texte"
+          }
+        }
+      }
+    },
+    "photos": {
+      "$ref": "socle.schema.json#/$defs/photos"
+    }
+  }
+}

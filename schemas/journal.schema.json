@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/sskorupski/skarden/schemas/journal.schema.json",
-  "title": "Entrée du journal — un événement daté d'une culture ou d'un élevage",
+  "title": "Entrée du journal — un événement daté d'une culture, d'un élevage ou d'une réalisation",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -17,6 +17,11 @@
     {
       "required": [
         "elevage"
+      ]
+    },
+    {
+      "required": [
+        "realisation"
       ]
     }
   ],
@@ -38,6 +43,52 @@
       "minimum": 0,
       "description": "Le nombre d'individus, pour une entrée d'élevage."
     },
+    "realisation": {
+      "$ref": "socle.schema.json#/$defs/lien"
+    },
+    "avis": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Un avis par participant ; seule une dégustation d'une réalisation en porte.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "participant",
+          "criteres"
+        ],
+        "properties": {
+          "participant": {
+            "$ref": "socle.schema.json#/$defs/texte",
+            "description": "Un prénom ou un pseudonyme : le dépôt est public."
+          },
+          "criteres": {
+            "type": "object",
+            "minProperties": 1,
+            "propertyNames": {
+              "enum": [
+                "couleur",
+                "limpidite",
+                "nez",
+                "bouche",
+                "texture",
+                "equilibre",
+                "finale",
+                "ensemble"
+              ]
+            },
+            "additionalProperties": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10
+            }
+          },
+          "commentaire": {
+            "$ref": "socle.schema.json#/$defs/texte"
+          }
+        }
+      }
+    },
     "photos": {
       "$ref": "socle.schema.json#/$defs/photos"
     }
@@ -49,8 +100,17 @@
           "elevage"
         ],
         "not": {
-          "required": [
-            "culture"
+          "anyOf": [
+            {
+              "required": [
+                "culture"
+              ]
+            },
+            {
+              "required": [
+                "realisation"
+              ]
+            }
           ]
         }
       },
@@ -72,6 +132,10 @@
               "observation",
               "perte"
             ]
+          },
+          "avis": {
+            "not": {},
+            "description": "réservé à une dégustation d'une réalisation."
           }
         }
       }
@@ -82,8 +146,17 @@
           "culture"
         ],
         "not": {
-          "required": [
-            "elevage"
+          "anyOf": [
+            {
+              "required": [
+                "elevage"
+              ]
+            },
+            {
+              "required": [
+                "realisation"
+              ]
+            }
           ]
         }
       },
@@ -108,6 +181,67 @@
           "effectif": {
             "not": {},
             "description": "réservé aux entrées d'un élevage."
+          },
+          "avis": {
+            "not": {},
+            "description": "réservé à une dégustation d'une réalisation."
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "realisation"
+        ],
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "culture"
+              ]
+            },
+            {
+              "required": [
+                "elevage"
+              ]
+            }
+          ]
+        }
+      },
+      "then": {
+        "properties": {
+          "evenement": {
+            "enum": [
+              "observation",
+              "degustation",
+              "incident",
+              "ajustement"
+            ]
+          },
+          "effectif": {
+            "not": {},
+            "description": "réservé aux entrées d'un élevage."
+          }
+        },
+        "if": {
+          "properties": {
+            "evenement": {
+              "const": "degustation"
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "avis"
+          ]
+        },
+        "else": {
+          "properties": {
+            "avis": {
+              "not": {},
+              "description": "réservé à une dégustation d'une réalisation."
+            }
           }
         }
       }

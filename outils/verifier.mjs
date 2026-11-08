@@ -9,8 +9,19 @@ import Ajv2020 from 'ajv/dist/2020.js';
 import { parse } from 'yaml';
 import { REGLES } from './regles.mjs';
 
+// Facultatives, elles se déclarent ensemble : une réalisation désigne une
+// recette, des produits et des contenants (cadrage 2026-007).
+const TRANSFORMATIONS = ['recettes', 'realisations', 'produits', 'contenants'];
+
 export function verifier(racine) {
   const config = parse(readFileSync(join(racine, 'referentiel.yml'), 'utf8'));
+  const manquantes = TRANSFORMATIONS.filter((nom) => !(nom in config.collections));
+  if (manquantes.length > 0 && manquantes.length < TRANSFORMATIONS.length) {
+    return [{
+      fichier: 'referentiel.yml',
+      message: `collections : ${TRANSFORMATIONS.join(', ')} se déclarent ensemble ; manque ${manquantes.join(', ')}.`,
+    }];
+  }
   const ajv = new Ajv2020({ allErrors: true, verbose: true });
   ajouterLesSchemas(ajv, racine, Object.values(config.collections));
   const defauts = [];
@@ -53,7 +64,7 @@ export function verifier(racine) {
   for (const [nom, collection] of Object.entries(config.collections)) {
     for (const { donnees, signaler } of fiches[nom]) {
       for (const [champ, cible] of Object.entries(collection.liens ?? {})) {
-        for (const id of [valeurDe(donnees, champ) ?? []].flat()) {
+        for (const id of valeursDe(donnees, champ)) {
           if (!ids[cible].has(id)) signaler(`${champ} : « ${id} » ne désigne aucune fiche de ${cible}.`);
         }
       }
@@ -107,10 +118,11 @@ function verifierRangementAnnuel(fichier, donnees, signaler) {
 
 // Un choix entre champs (`oneOf` ou `anyOf` dont chaque branche n'exige qu'un
 // champ) se dit en une phrase : l'échec de chacune de ses branches se tait.
+// Un nom de champ hors de sa liste (`propertyNames`) se dit par son `enum`.
 function messagesDeSchema(erreurs) {
   const choix = erreurs.filter(estUnChoixDeChamps).map((erreur) => erreur.schemaPath);
   return erreurs
-    .filter((erreur) => erreur.keyword !== 'if')
+    .filter((erreur) => !['if', 'propertyNames'].includes(erreur.keyword))
     .filter((erreur) => !choix.some((chemin) => erreur.schemaPath.startsWith(`${chemin}/`)))
     .map(messageDeSchema);
 }
@@ -129,12 +141,20 @@ function messageDeSchema(erreur) {
   if (erreur.keyword === 'not' && erreur.parentSchema.description) return `${champ} : ${erreur.parentSchema.description}`;
   if (erreur.keyword === 'additionalProperties') return `champ inconnu : ${erreur.params.additionalProperty}.`;
   if (erreur.keyword === 'required') return `champ requis absent : ${erreur.params.missingProperty}.`;
+  if (erreur.keyword === 'enum' && erreur.propertyName !== undefined) {
+    return `${champ} : « ${erreur.propertyName} » hors de la liste (${erreur.params.allowedValues.join(', ')}).`;
+  }
   if (erreur.keyword === 'enum') return `${champ} : valeur hors de la liste (${erreur.params.allowedValues.join(', ')}).`;
   return `${champ} : ${erreur.message}.`;
 }
 
-function valeurDe(objet, chemin) {
-  return chemin.split('.').reduce((valeur, cle) => valeur?.[cle], objet);
+// Les valeurs d'un chemin pointé, à travers les objets comme les listes :
+// `ingredients.produit` rend le produit de chaque ingrédient qui en a un.
+function valeursDe(objet, chemin) {
+  return chemin.split('.').reduce(
+    (valeurs, cle) => valeurs.flatMap((valeur) => [valeur?.[cle] ?? []].flat()),
+    [objet],
+  );
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

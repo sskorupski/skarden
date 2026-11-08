@@ -10,9 +10,16 @@ const DEPOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const ELEVAGE = 'elevages/2026-petit-gris-garage.md';
 const ANIMAL = 'animaux/petit-gris.md';
 const DORMANCE = 'journal/2026/2026-11-03-petit-gris-mise-en-dormance.md';
+const RECETTE = 'recettes/liqueur-hibiscus.md';
+const VARIANTE = 'recettes/liqueur-hibiscus-gingembre.md';
+const REALISATION = 'realisations/2026-11-07-liqueur-hibiscus-gingembre.md';
+const PRODUIT = 'produits/bissap-sachet-500g.md';
+const CONTENANT = 'contenants/bocal-parfait-1l.md';
+const DEGUSTATION = 'journal/2026/2026-11-10-liqueur-hibiscus-gingembre-degustation.md';
 
 // Un référentiel jetable, peuplé des modèles rangés là où ils vivraient, et des
-// fiches tirées du guide d'élevage d'escargots que les modèles désignent.
+// fiches que les modèles désignent : celles du guide d'élevage d'escargots, et
+// la variante de la liqueur d'hibiscus avec sa dégustation.
 function referentielDesModeles() {
   const racine = mkdtempSync(join(tmpdir(), 'skarden-'));
   cpSync(join(DEPOT, 'referentiel.yml'), join(racine, 'referentiel.yml'));
@@ -27,7 +34,12 @@ function referentielDesModeles() {
   ecrire(racine, 'installations/aquarium-garage.md', modele('installation'));
   ecrire(racine, 'procedures/preparation-substrat-terre.md', modele('procedure'));
   ecrire(racine, ELEVAGE, modele('elevage'));
+  ecrire(racine, RECETTE, modele('recette'));
+  ecrire(racine, REALISATION, modele('realisation'));
+  ecrire(racine, PRODUIT, modele('produit'));
+  ecrire(racine, CONTENANT, modele('contenant'));
   cpSync(join(DEPOT, 'tests', 'fixtures', 'escargots'), racine, { recursive: true });
+  cpSync(join(DEPOT, 'tests', 'fixtures', 'transformations'), racine, { recursive: true });
   return racine;
 }
 
@@ -272,13 +284,13 @@ test('un élevage terminé avec sa date de fin est accepté', () => {
 test('une entrée du journal qui désigne à la fois une culture et un élevage est signalée', () => {
   const racine = referentielDesModeles();
   remplacer(racine, DORMANCE, 'elevage: 2026-petit-gris-garage', 'elevage: 2026-petit-gris-garage\nculture: 2026-basilic-cuisine');
-  unSeulDefaut(racine, DORMANCE, /culture, elevage/);
+  unSeulDefaut(racine, DORMANCE, /culture, elevage, realisation/);
 });
 
 test('une entrée du journal qui ne désigne aucun lot est signalée', () => {
   const racine = referentielDesModeles();
   remplacer(racine, DORMANCE, 'elevage: 2026-petit-gris-garage\n', '');
-  unSeulDefaut(racine, DORMANCE, /culture, elevage/);
+  unSeulDefaut(racine, DORMANCE, /culture, elevage, realisation/);
 });
 
 test("un événement d'élevage sur une culture est signalé", () => {
@@ -303,4 +315,397 @@ test("une entrée du journal dont l'élevage n'existe pas est signalée", () => 
   const racine = referentielDesModeles();
   remplacer(racine, DORMANCE, 'elevage: 2026-petit-gris-garage', 'elevage: 2026-daphnies-garage');
   unSeulDefaut(racine, DORMANCE, /2026-daphnies-garage/);
+});
+
+// Le journal de transformations, cadrage 2026-007.
+
+test('les quatre collections des transformations se déclarent ensemble', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, 'referentiel.yml', '  contenants:\n', '  ustensiles:\n');
+  unSeulDefaut(racine, 'referentiel.yml', /contenants/);
+});
+
+test("une recette d'une catégorie hors de la liste est signalée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, RECETTE, 'categorie: liqueur', 'categorie: digestif');
+  unSeulDefaut(racine, RECETTE, /categorie/);
+});
+
+test('une recette sans version est signalée', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, RECETTE, 'version: 1\n', '');
+  unSeulDefaut(racine, RECETTE, /version/);
+});
+
+test('une recette en version 0 est signalée', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, RECETTE, 'version: 1', 'version: 0');
+  unSeulDefaut(racine, RECETTE, /version/);
+});
+
+test('une recette sans ingrédients est signalée', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, RECETTE, /ingredients:\n(  - .*\n)+/.exec(readFileSync(join(racine, RECETTE), 'utf8'))[0], 'ingredients: []\n');
+  unSeulDefaut(racine, RECETTE, /ingredients/);
+});
+
+test('une unité hors de la liste est signalée', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, RECETTE, 'quantite: 700, unite: ml', 'quantite: 0.7, unite: L');
+  unSeulDefaut(racine, RECETTE, /ingredients\.1\.unite/);
+});
+
+test('une quantité nulle est signalée', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, RECETTE, 'quantite: 200, unite: g', 'quantite: 0, unite: g');
+  unSeulDefaut(racine, RECETTE, /ingredients\.2\.quantite/);
+});
+
+test("une conservation hors de la liste est signalée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, RECETTE, 'conservation: seche', 'conservation: lyophilise');
+  unSeulDefaut(racine, RECETTE, /conservation/);
+});
+
+test("un nom d'ingrédient qui n'est pas en kebab-case est signalé", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, RECETTE, 'ingredient: hibiscus,', 'ingredient: Hibiscus séché,');
+  unSeulDefaut(racine, RECETTE, /ingredients\.0\.ingredient/);
+});
+
+test('deux ingrédients du même nom dans une recette sont signalés', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, RECETTE, 'ingredient: eau,', 'ingredient: sucre,');
+  unSeulDefaut(racine, RECETTE, /sucre.*deux fois/);
+});
+
+test('deux phases du même id dans une recette sont signalées', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, RECETTE, 'id: repos', 'id: filtration');
+  unSeulDefaut(racine, RECETTE, /filtration.*deux fois/);
+});
+
+test("une durée cible qui n'est pas une durée ISO 8601 est signalée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, RECETTE, 'min: P3D, max: P5D', 'min: 3 jours, max: P5D');
+  unSeulDefaut(racine, RECETTE, /duree_cible\.min/);
+});
+
+test('une durée cible dont le minimum dépasse le maximum est signalée', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, RECETTE, 'min: P2W, max: P4W', 'min: P5W, max: P4W');
+  unSeulDefaut(racine, RECETTE, /repos.*P5W.*P4W.*minimum/);
+});
+
+test('une durée cible se compare toutes unités confondues', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, RECETTE, 'min: P3D, max: P5D', 'min: PT72H, max: P1W');
+  assert.deepEqual(verifier(racine), []);
+});
+
+test('une température cible dont le minimum dépasse le maximum est signalée', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, RECETTE, 'min: 18, max: 22', 'min: 22, max: 18');
+  unSeulDefaut(racine, RECETTE, /maceration.*22.*18.*minimum/);
+});
+
+test("une variante qui dérive d'une recette inexistante est signalée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, VARIANTE, 'derive_de: liqueur-hibiscus', 'derive_de: liqueur-rose');
+  unSeulDefaut(racine, VARIANTE, /liqueur-rose/);
+});
+
+test("une recette qui dérive d'elle-même est signalée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, RECETTE, 'version: 1', 'version: 1\nderive_de: liqueur-hibiscus');
+  unSeulDefaut(racine, RECETTE, /derive_de.*liqueur-hibiscus/);
+});
+
+test('deux recettes qui dérivent l\'une de l\'autre sont signalées chacune', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, RECETTE, 'version: 1', 'version: 1\nderive_de: liqueur-hibiscus-gingembre');
+  const defauts = verifier(racine);
+  assert.deepEqual(defauts.map(({ fichier }) => fichier).sort(), [RECETTE, VARIANTE].sort(), JSON.stringify(defauts, null, 2));
+  for (const { message } of defauts) assert.match(message, /liqueur-hibiscus → liqueur-hibiscus-gingembre|liqueur-hibiscus-gingembre → liqueur-hibiscus/);
+});
+
+test("une variante de variante est acceptée", () => {
+  const racine = referentielDesModeles();
+  ecrire(racine, 'recettes/liqueur-hibiscus-gingembre-piment.md',
+    readFileSync(join(racine, VARIANTE), 'utf8')
+      .replace('id: liqueur-hibiscus-gingembre', 'id: liqueur-hibiscus-gingembre-piment')
+      .replace('derive_de: liqueur-hibiscus', 'derive_de: liqueur-hibiscus-gingembre'));
+  assert.deepEqual(verifier(racine), []);
+});
+
+test('un produit sans ingrédient est signalé', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, PRODUIT, 'ingredient: hibiscus\n', '');
+  unSeulDefaut(racine, PRODUIT, /ingredient/);
+});
+
+test("une matière de contenant hors de la liste est signalée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, CONTENANT, 'matiere: verre', 'matiere: cristal');
+  unSeulDefaut(racine, CONTENANT, /matiere/);
+});
+
+test('un contenant sans contenance est signalé', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, CONTENANT, 'contenance: { quantite: 1, unite: l }\n', '');
+  unSeulDefaut(racine, CONTENANT, /contenance/);
+});
+
+test('un contenant qui désigne un emplacement est signalé', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, CONTENANT, 'matiere: verre', 'matiere: verre\nemplacement: garage');
+  unSeulDefaut(racine, CONTENANT, /emplacement/);
+});
+
+test("une réalisation dont l'identifiant ne commence pas par la date de son début est signalée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, 'debut: 2026-11-07T18:30\nfin', 'debut: 2026-11-06T18:30\nfin');
+  unSeulDefaut(racine, REALISATION, /2026-11-06-/);
+});
+
+test("un début qui n'est ni une date ni une date avec heure est signalé", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, 'debut: 2026-11-07T18:30\nfin', 'debut: 7 novembre 2026\nfin');
+  unSeulDefaut(racine, REALISATION, /debut/);
+});
+
+test("une recette invalide n'est signalée que sur elle-même, pas sur ses réalisations", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, VARIANTE, 'categorie: liqueur', 'categorie: digestif');
+  unSeulDefaut(racine, VARIANTE, /categorie/);
+});
+
+test("une réalisation dont la recette n'existe pas est signalée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, 'recette: liqueur-hibiscus-gingembre', 'recette: liqueur-rose');
+  unSeulDefaut(racine, REALISATION, /liqueur-rose/);
+});
+
+test('une version de recette plus récente que la recette est signalée', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, 'recette_version: 1', 'recette_version: 2');
+  unSeulDefaut(racine, REALISATION, /recette_version.*2.*1/);
+});
+
+test("une version antérieure de la recette est acceptée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, VARIANTE, 'version: 1', 'version: 3');
+  assert.deepEqual(verifier(racine), []);
+});
+
+test("un ingrédient dont le produit n'existe pas est signalé", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, 'produit: bissap-sachet-500g', 'produit: bissap-sachet-1kg');
+  unSeulDefaut(racine, REALISATION, /ingredients\.produit.*bissap-sachet-1kg/);
+});
+
+test("un ingrédient venu d'une culture est accepté, avec sa date de cueillette", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, '{ ingredient: cannelle,', '{ ingredient: basilic, quantite: 10, unite: g, conservation: frais, culture: 2026-basilic-cuisine, recolte: 2026-11-07, ajoute: true }\n  - { ingredient: cannelle,');
+  assert.deepEqual(verifier(racine), []);
+});
+
+test("un ingrédient dont la culture n'existe pas est signalé", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, '{ ingredient: gingembre, quantite: 25, unite: g, conservation: frais }', '{ ingredient: gingembre, quantite: 25, unite: g, conservation: frais, culture: 2026-gingembre-serre }');
+  unSeulDefaut(racine, REALISATION, /ingredients\.culture.*2026-gingembre-serre/);
+});
+
+test('un ingrédient à la fois acheté et cueilli est signalé', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, 'produit: bissap-sachet-500g', 'produit: bissap-sachet-500g\n    culture: 2026-basilic-cuisine');
+  unSeulDefaut(racine, REALISATION, /hibiscus.*produit.*culture/);
+});
+
+test("un lot d'achat sur un ingrédient sans produit est signalé", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, '{ ingredient: sucre, quantite: 200, unite: g }', '{ ingredient: sucre, quantite: 200, unite: g, lot: A12 }');
+  unSeulDefaut(racine, REALISATION, /ingredients\.2.*produit/);
+});
+
+test("un ingrédient absent de la recette est signalé", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, 'ingredient: cannelle,', 'ingredient: canelle,');
+  unSeulDefaut(racine, REALISATION, /canelle.*liqueur-hibiscus-gingembre/);
+});
+
+test("un ingrédient ajouté à la recette est accepté", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, 'ingredient: cannelle, quantite: 1, unite: piece, conservation: seche', 'ingredient: vanille, quantite: 1, unite: piece, conservation: seche, ajoute: true');
+  assert.deepEqual(verifier(racine), []);
+});
+
+test("une phase absente de la recette est signalée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, '  - id: maceration', '  - id: infusion');
+  unSeulDefaut(racine, REALISATION, /infusion.*liqueur-hibiscus-gingembre/);
+});
+
+test("une phase ajoutée à la recette est acceptée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, 'ecarts:', '  - { id: clarification, debut: 2026-11-08, ajoutee: true }\necarts:');
+  assert.deepEqual(verifier(racine), []);
+});
+
+test("une phase dont le contenant n'existe pas est signalée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, 'contenant: bocal-parfait-1l', 'contenant: bocal-parfait-2l');
+  unSeulDefaut(racine, REALISATION, /phases\.contenant.*bocal-parfait-2l/);
+});
+
+test('une phase qui finit avant son début est signalée', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, '    debut: 2026-11-07T18:30\n', '    debut: 2026-11-07T18:30\n    fin: 2026-11-07T09:00\n');
+  unSeulDefaut(racine, REALISATION, /maceration.*2026-11-07T09:00/);
+});
+
+test("une phase qui finit le jour de son début, sans heure, est acceptée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, '    debut: 2026-11-07T18:30\n', '    debut: 2026-11-07T18:30\n    fin: 2026-11-07\n');
+  assert.deepEqual(verifier(racine), []);
+});
+
+test("une durée écrite sur une phase est signalée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, '    nombre: 1\n', '    nombre: 1\n    duree: P4D\n');
+  unSeulDefaut(racine, REALISATION, /duree/);
+});
+
+test('une température relevée dont le minimum dépasse le maximum est signalée', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, 'min: 19, max: 21', 'min: 21, max: 19');
+  unSeulDefaut(racine, REALISATION, /maceration.*21.*19.*minimum/);
+});
+
+for (const statut of ['terminee', 'perdue']) {
+  test(`une réalisation ${statut} sans fin est signalée`, () => {
+    const racine = referentielDesModeles();
+    remplacer(racine, REALISATION, 'statut: en-cours', `statut: ${statut}`);
+    unSeulDefaut(racine, REALISATION, /fin/);
+  });
+}
+
+test('une réalisation en cours qui a une fin est signalée', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, 'fin: null', 'fin: 2026-12-01');
+  unSeulDefaut(racine, REALISATION, /fin/);
+});
+
+test('une réalisation terminée avant son début est signalée', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, 'statut: en-cours', 'statut: terminee');
+  remplacer(racine, REALISATION, 'fin: null', 'fin: 2026-11-06');
+  unSeulDefaut(racine, REALISATION, /fin.*2026-11-06/);
+});
+
+test('une réalisation terminée avec sa fin et son résultat est acceptée', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, REALISATION, 'statut: en-cours', 'statut: terminee');
+  remplacer(racine, REALISATION, 'fin: null', 'fin: 2026-12-05\nresultat: { volume_obtenu: { quantite: 0.9, unite: l }, degre_estime: 25 }');
+  assert.deepEqual(verifier(racine), []);
+});
+
+test("une entrée du journal qui désigne à la fois une réalisation et une culture est signalée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, DEGUSTATION, 'evenement: degustation', 'evenement: degustation\nculture: 2026-basilic-cuisine');
+  unSeulDefaut(racine, DEGUSTATION, /exactement un des champs culture, elevage, realisation/);
+});
+
+test("une entrée du journal dont la réalisation n'existe pas est signalée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, DEGUSTATION, 'realisation: 2026-11-07-liqueur-hibiscus-gingembre', 'realisation: 2026-11-07-liqueur-rose');
+  unSeulDefaut(racine, DEGUSTATION, /2026-11-07-liqueur-rose/);
+});
+
+test("un événement de culture sur une réalisation est signalé", () => {
+  const racine = referentielDesModeles();
+  ecrire(racine, 'journal/2026/2026-11-09-liqueur-hibiscus-gingembre-recolte.md',
+    '---\ndate: 2026-11-09\nrealisation: 2026-11-07-liqueur-hibiscus-gingembre\nevenement: recolte\n---\n');
+  unSeulDefaut(racine, 'journal/2026/2026-11-09-liqueur-hibiscus-gingembre-recolte.md', /evenement/);
+});
+
+test("une observation d'une réalisation est acceptée", () => {
+  const racine = referentielDesModeles();
+  ecrire(racine, 'journal/2026/2026-11-09-liqueur-hibiscus-gingembre-observation.md',
+    '---\ndate: 2026-11-09\nrealisation: 2026-11-07-liqueur-hibiscus-gingembre\nevenement: observation\n---\n\nRouge profond dès le deuxième jour.\n');
+  assert.deepEqual(verifier(racine), []);
+});
+
+test("un effectif sur une entrée de réalisation est signalé", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, DEGUSTATION, 'evenement: degustation', 'evenement: degustation\neffectif: 2');
+  unSeulDefaut(racine, DEGUSTATION, /effectif/);
+});
+
+test('une dégustation sans avis est signalée', () => {
+  const racine = referentielDesModeles();
+  ecrire(racine, 'journal/2026/2026-11-09-liqueur-hibiscus-gingembre-degustation.md',
+    '---\ndate: 2026-11-09\nrealisation: 2026-11-07-liqueur-hibiscus-gingembre\nevenement: degustation\n---\n');
+  unSeulDefaut(racine, 'journal/2026/2026-11-09-liqueur-hibiscus-gingembre-degustation.md', /avis/);
+});
+
+test('une dégustation à la liste d\'avis vide est signalée', () => {
+  const racine = referentielDesModeles();
+  ecrire(racine, 'journal/2026/2026-11-09-liqueur-hibiscus-gingembre-degustation.md',
+    '---\ndate: 2026-11-09\nrealisation: 2026-11-07-liqueur-hibiscus-gingembre\nevenement: degustation\navis: []\n---\n');
+  unSeulDefaut(racine, 'journal/2026/2026-11-09-liqueur-hibiscus-gingembre-degustation.md', /avis/);
+});
+
+test('deux avis du même participant dans une séance sont signalés', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, DEGUSTATION, 'participant: Sam', 'participant: Camille');
+  unSeulDefaut(racine, DEGUSTATION, /Camille.*deux avis/);
+});
+
+test('une note au-delà de 10 est signalée', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, DEGUSTATION, 'couleur: 9', 'couleur: 11');
+  unSeulDefaut(racine, DEGUSTATION, /avis\.0\.criteres\.couleur/);
+});
+
+test('une note négative est signalée', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, DEGUSTATION, 'bouche: 6', 'bouche: -1');
+  unSeulDefaut(racine, DEGUSTATION, /avis\.0\.criteres\.bouche/);
+});
+
+test('un critère hors de la liste est signalé', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, DEGUSTATION, 'equilibre: 6', 'amertume: 6');
+  unSeulDefaut(racine, DEGUSTATION, /amertume/);
+});
+
+test('un avis sans aucun critère noté est signalé', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, DEGUSTATION, '{ couleur: 8, bouche: 7, equilibre: 6 }', '{}');
+  unSeulDefaut(racine, DEGUSTATION, /avis\.1\.criteres/);
+});
+
+test('un délai écrit sur une dégustation est signalé', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, DEGUSTATION, 'evenement: degustation', 'evenement: degustation\ndelai: P3D');
+  unSeulDefaut(racine, DEGUSTATION, /delai/);
+});
+
+test("des avis sur une observation d'une réalisation sont signalés", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, DEGUSTATION, 'evenement: degustation', 'evenement: observation');
+  unSeulDefaut(racine, DEGUSTATION, /avis/);
+});
+
+test("des avis sur une entrée de culture sont signalés", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, 'journal/2026/2026-05-02-basilic-rempotage.md', 'evenement: rempotage', 'evenement: rempotage\navis: [{ participant: Camille, criteres: { nez: 5 } }]');
+  unSeulDefaut(racine, 'journal/2026/2026-05-02-basilic-rempotage.md', /avis/);
+});
+
+test('une photo absente citée par une recette est signalée', () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, RECETTE, 'photos: []', 'photos: [medias/recettes/liqueur-hibiscus.jpg]');
+  unSeulDefaut(racine, RECETTE, /medias\/recettes\/liqueur-hibiscus\.jpg/);
 });

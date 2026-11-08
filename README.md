@@ -8,7 +8,8 @@ Ce dépôt est le référentiel de Skarden : une fiche Markdown à frontmatter Y
 - **Un lot** dit ce qui a réellement vécu chez moi, sur une période : une culture (`cultures/`) ou un élevage (`elevages/`).
 - **Une installation** (`installations/`) décrit le contenant qui abrite un élevage — un aquarium, un terrarium, un bac —, et **un emplacement** (`emplacements/`) l'endroit où il se trouve.
 - **Une procédure** (`procedures/`) décrit une préparation réutilisable, que les espèces citent.
-- **Le journal** (`journal/`) date les événements d'une culture ou d'un élevage.
+- **Une recette** (`recettes/`) dit ce qu'une préparation demande — une liqueur, un sirop, une conserve, une fermentation —, et ses variantes ce qu'on y change. **Une réalisation** (`realisations/`) dit ce qui a réellement été fait un jour donné : la provenance de chaque ingrédient, un **produit** acheté (`produits/`) ou une culture, et la durée réelle de chaque phase, dans quel **contenant** (`contenants/`).
+- **Le journal** (`journal/`) date les événements d'une culture, d'un élevage ou d'une réalisation, dégustations comprises.
 
 Les photos vivent dans `medias/`, en Git LFS.
 

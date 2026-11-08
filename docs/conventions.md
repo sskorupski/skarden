@@ -4,6 +4,9 @@
 
 - **Un `id` en kebab-case, sans accent, égal au nom du fichier** : `basilic-grand-vert`, `rebord-cuisine`. Le vérificateur l'exige.
 - **Une culture ou un élevage se préfixe de son année de début** : `2026-basilic-cuisine`, `2026-petit-gris-garage`. Deux lots de la même espèce au même endroit restent distincts d'une année à l'autre ; pour un élevage, le vérificateur l'exige.
+- **Une réalisation se préfixe de la date de son début** : `2026-11-07-liqueur-hibiscus-gingembre`. Le vérificateur l'exige.
+- **Une variante de recette prolonge le nom de sa source** : `liqueur-hibiscus-gingembre` dérive de `liqueur-hibiscus`.
+- **Un nom d'ingrédient ne dit pas son état** : `hibiscus` avec `conservation: seche`, jamais `hibiscus-seche`.
 - **Une entrée du journal se nomme d'après sa date**, puis le lot et l'événement : `2026-05-02-basilic-rempotage.md`, `2026-11-03-petit-gris-mise-en-dormance.md`, dans `journal/2026/`.
 - **Les valeurs énumérées sont des mots français en kebab-case, sans accent** (`plein-soleil`, `terminee`) : lisibles en brut (INV-2), stables pour les liens.
 - **Les noms de champs du frontmatter sont en français, en snake_case** : `nom_latin`, `temperature_min_c`.

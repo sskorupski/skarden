@@ -11,7 +11,8 @@ projet:
 
 # Chaque collection : son dossier, le schéma de son frontmatter, et les champs
 # qui désignent une fiche d'une autre collection par son `id`. Un chemin pointé
-# désigne un champ imbriqué ; un champ liste désigne une fiche par élément.
+# désigne un champ imbriqué, et traverse les listes qu'il rencontre
+# (`ingredients.produit`) ; un champ liste désigne une fiche par élément.
 # Les schémas reprennent par `$ref` les définitions communes de
 # `schemas/socle.schema.json`, qui n'est pas une collection.
 collections:
@@ -72,3 +73,29 @@ collections:
     liens:
       culture: cultures
       elevage: elevages
+      realisation: realisations
+
+  # Les transformations (cadrage 2026-007) : facultatives, mais les quatre
+  # collections se déclarent ensemble.
+  recettes:
+    dossier: recettes
+    schema: schemas/recette.schema.json
+    liens:
+      derive_de: recettes
+
+  realisations:
+    dossier: realisations
+    schema: schemas/realisation.schema.json
+    liens:
+      recette: recettes
+      ingredients.produit: produits
+      ingredients.culture: cultures
+      phases.contenant: contenants
+
+  produits:
+    dossier: produits
+    schema: schemas/produit.schema.json
+
+  contenants:
+    dossier: contenants
+    schema: schemas/contenant.schema.json
