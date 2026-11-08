@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sskorupski/skarden/schemas/contenant.schema.json",
+  "title": "Contenant — un modèle de récipient, possédé en un ou plusieurs exemplaires",
+  "description": "Il ne désigne aucun emplacement, à la différence d'une installation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "nom",
+    "categorie",
+    "contenance",
+    "matiere"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "socle.schema.json#/$defs/id"
+    },
+    "nom": {
+      "$ref": "socle.schema.json#/$defs/nom"
+    },
+    "categorie": {
+      "$ref": "socle.schema.json#/$defs/categorie_de_contenant"
+    },
+    "contenance": {
+      "$ref": "socle.schema.json#/$defs/quantite"
+    },
+    "matiere": {
+      "enum": [
+        "verre",
+        "inox",
+        "plastique-alimentaire",
+        "bois",
+        "gres"
+      ]
+    },
+    "fermeture": {
+      "$ref": "socle.schema.json#/$defs/texte"
+    },
+    "nombre": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Combien j'en possède."
+    },
+    "photos": {
+      "$ref": "socle.schema.json#/$defs/photos"
+    }
+  }
+}

@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sskorupski/skarden/schemas/realisation.schema.json",
+  "title": "Réalisation — ce qui a réellement été fait, en suivant une recette",
+  "description": "Recopie les ingrédients et les phases employés ; ce qui s'observe ensuite va au journal.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "nom",
+    "recette",
+    "recette_version",
+    "statut",
+    "debut",
+    "ingredients",
+    "phases"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "socle.schema.json#/$defs/id",
+      "description": "Commence par la date du début : 2026-11-07-liqueur-hibiscus-gingembre."
+    },
+    "nom": {
+      "$ref": "socle.schema.json#/$defs/nom"
+    },
+    "recette": {
+      "$ref": "socle.schema.json#/$defs/lien"
+    },
+    "recette_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "statut": {
+      "$ref": "socle.schema.json#/$defs/statut"
+    },
+    "debut": {
+      "$ref": "socle.schema.json#/$defs/date_ou_instant"
+    },
+    "fin": {
+      "$ref": "socle.schema.json#/$defs/date_ou_instant_ou_vide"
+    },
+    "ingredients": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ingredient",
+          "quantite",
+          "unite"
+        ],
+        "dependentRequired": {
+          "lot": [
+            "produit"
+          ],
+          "dluo": [
+            "produit"
+          ],
+          "achat": [
+            "produit"
+          ],
+          "recolte": [
+            "culture"
+          ]
+        },
+        "properties": {
+          "ingredient": {
+            "$ref": "socle.schema.json#/$defs/id",
+            "description": "Un nom libre en kebab-case, qui ne désigne aucune fiche ; unique dans la recette."
+          },
+          "quantite": {
+            "$ref": "socle.schema.json#/$defs/nombre_positif"
+          },
+          "unite": {
+            "$ref": "socle.schema.json#/$defs/unite"
+          },
+          "conservation": {
+            "$ref": "socle.schema.json#/$defs/conservation"
+          },
+          "produit": {
+            "$ref": "socle.schema.json#/$defs/lien",
+            "description": "Acheté : la fiche produit."
+          },
+          "lot": {
+            "$ref": "socle.schema.json#/$defs/texte"
+          },
+          "dluo": {
+            "$ref": "socle.schema.json#/$defs/date"
+          },
+          "achat": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "date": {
+                "$ref": "socle.schema.json#/$defs/date"
+              },
+              "lieu": {
+                "$ref": "socle.schema.json#/$defs/texte"
+              },
+              "prix_eur": {
+                "type": "number",
+                "minimum": 0
+              }
+            }
+          },
+          "culture": {
+            "$ref": "socle.schema.json#/$defs/lien",
+            "description": "Cueilli chez moi : la culture d'où il vient."
+          },
+          "recolte": {
+            "$ref": "socle.schema.json#/$defs/date",
+            "description": "La date de cueillette."
+          },
+          "ajoute": {
+            "type": "boolean",
+            "description": "true quand la recette n'a pas cet ingrédient."
+          }
+        }
+      }
+    },
+    "phases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "debut"
+        ],
+        "description": "Sa durée ne s'écrit pas : elle se calcule de debut à fin.",
+        "properties": {
+          "id": {
+            "$ref": "socle.schema.json#/$defs/id"
+          },
+          "debut": {
+            "$ref": "socle.schema.json#/$defs/date_ou_instant"
+          },
+          "fin": {
+            "$ref": "socle.schema.json#/$defs/date_ou_instant"
+          },
+          "contenant": {
+            "$ref": "socle.schema.json#/$defs/lien"
+          },
+          "nombre": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "temperature_c": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "min",
+              "max"
+            ],
+            "properties": {
+              "min": {
+                "type": "number"
+              },
+              "max": {
+                "type": "number"
+              },
+              "mesure": {
+                "$ref": "socle.schema.json#/$defs/texte",
+                "description": "L'instrument ou la méthode."
+              }
+            }
+          },
+          "conditions": {
+            "$ref": "socle.schema.json#/$defs/texte"
+          },
+          "ajoutee": {
+            "type": "boolean",
+            "description": "true quand la recette n'a pas cette phase."
+          }
+        }
+      }
+    },
+    "ecarts": {
+      "$ref": "socle.schema.json#/$defs/textes"
+    },
+    "resultat": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "volume_obtenu": {
+          "$ref": "socle.schema.json#/$defs/quantite"
+        },
+        "degre_estime": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "En % vol."
+        }
+      }
+    },
+    "photos": {
+      "$ref": "socle.schema.json#/$defs/photos"
+    }
+  }
+}

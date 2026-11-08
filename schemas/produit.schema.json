@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sskorupski/skarden/schemas/produit.schema.json",
+  "title": "Produit — une matière première achetée",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "nom",
+    "ingredient"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "socle.schema.json#/$defs/id"
+    },
+    "nom": {
+      "$ref": "socle.schema.json#/$defs/nom"
+    },
+    "ingredient": {
+      "$ref": "socle.schema.json#/$defs/id",
+      "description": "Le nom de l'ingrédient qu'il fournit, tel que les recettes l'écrivent."
+    },
+    "conservation": {
+      "$ref": "socle.schema.json#/$defs/conservation"
+    },
+    "marque": {
+      "$ref": "socle.schema.json#/$defs/texte"
+    },
+    "fournisseur": {
+      "$ref": "socle.schema.json#/$defs/texte"
+    },
+    "origine": {
+      "$ref": "socle.schema.json#/$defs/texte"
+    },
+    "conditionnement": {
+      "$ref": "socle.schema.json#/$defs/quantite"
+    },
+    "reference": {
+      "$ref": "socle.schema.json#/$defs/texte",
+      "description": "Un code EAN ou une référence fournisseur."
+    },
+    "url": {
+      "type": "string",
+      "pattern": "^https?://"
+    },
+    "photos": {
+      "$ref": "socle.schema.json#/$defs/photos"
+    }
+  }
+}

@@ -41,7 +41,7 @@ Un champ ajouté reste facultatif tant que des fiches existent sans lui. Le reno
 
 ## Les tests
 
-Le lanceur de Node (`node --test`), sans dépendance de test. Ceux de la conversion des photos postées depuis le site (`tests/photos-en-lfs.test.mjs`) demandent `git-lfs`, installé sur les runners de GitHub. Chaque test des vérificateurs fabrique un référentiel jetable dans un dossier temporaire, peuplé des modèles et des fiches de `tests/fixtures/` que les modèles désignent — tirées du guide d'élevage d'escargots —, puis y introduit un seul défaut et vérifie qu'il est signalé une fois, sur la bonne fiche. Test rouge d'abord : un test qui n'a jamais échoué n'a rien prouvé.
+Le lanceur de Node (`node --test`), sans dépendance de test. Ceux de la conversion des photos postées depuis le site (`tests/photos-en-lfs.test.mjs`) demandent `git-lfs`, installé sur les runners de GitHub. Chaque test des vérificateurs fabrique un référentiel jetable dans un dossier temporaire, peuplé des modèles et des fiches de `tests/fixtures/` que les modèles désignent — tirées du guide d'élevage d'escargots, et, pour les transformations, la variante de la liqueur d'hibiscus et sa dégustation —, puis y introduit un seul défaut et vérifie qu'il est signalé une fois, sur la bonne fiche. Test rouge d'abord : un test qui n'a jamais échoué n'a rien prouvé.
 
 ## Le cycle de livraison
 

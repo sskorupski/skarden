@@ -14,10 +14,14 @@ installations/         une fiche par contenant : aquarium, terrarium, bac, dans 
 procedures/            une fiche par préparation réutilisable, citée par les espèces
 cultures/              une fiche par culture menée : une plante, un emplacement, une période
 elevages/              une fiche par élevage mené : un animal, une installation, une période
-journal/AAAA/          une entrée par événement daté d'une culture ou d'un élevage, rangée par année
+recettes/              une fiche par recette : ce qu'une préparation demande ; une variante est une recette qui désigne sa source par derive_de
+realisations/          une fiche par réalisation : ce qui a réellement été fait, un jour donné, en suivant une recette
+produits/              une fiche par matière première achetée
+contenants/            une fiche par modèle de bocal, de bouteille ou de fût, possédé en un ou plusieurs exemplaires
+journal/AAAA/          une entrée par événement daté d'une culture, d'un élevage ou d'une réalisation, rangée par année
 medias/                les photos, en Git LFS (INV-3)
 outils/                verifier.mjs et regles.mjs, verifier-lfs.mjs, photos-en-lfs.mjs, et le script de mise en place GitHub
-tests/                 les tests des outils, avec le lanceur de Node ; fixtures/ tient les fiches que les modèles désignent
+tests/                 les tests des outils, avec le lanceur de Node ; fixtures/ tient les fiches que les modèles désignent, et le jeu d'exemple des transformations
 ```
 
 ## Les gestes courants
@@ -37,6 +41,58 @@ tests/                 les tests des outils, avec le lanceur de Node ; fixtures/
 4. `pnpm verifier`.
 
 Une fiche désigne les autres par leur `id` : écrire d'abord celles qu'elle désigne. Pour un élevage, la famille, l'animal, les procédures qu'il cite, l'emplacement et l'installation viennent avant la fiche élevage, et le `mode` de l'élevage se choisit parmi ceux de l'animal.
+
+## Tenir une transformation
+
+Les quatre collections `recettes/`, `realisations/`, `produits/` et `contenants/` sont facultatives, mais se déclarent ensemble dans `referentiel.yml`. Le jeu d'exemple complet — la recette `liqueur-hibiscus`, sa variante, une réalisation en cours et sa dégustation, le produit et le contenant — est dans `modeles/` et `tests/fixtures/transformations/`.
+
+### Créer une recette
+
+Copier `modeles/recette.md` dans `recettes/<id>.md`, avec `version: 1`. Chaque ingrédient porte `ingredient`, un nom libre en kebab-case et unique dans la recette, `quantite` et `unite` (`g`, `kg`, `ml`, `cl`, `l`, `piece`, `pincee`, `cac`, `cas`). Son état va dans `conservation` (`frais`, `seche`, `congele`), jamais dans son nom : `hibiscus` avec `conservation: seche`, et non `hibiscus-seche`. Les phases s'écrivent dans l'ordre d'exécution, chacune avec un `id` unique et un `libelle` ; `duree_cible` et `temperature_c` sont des plages `{ min, max }`, les durées en ISO 8601 (`P3D`, `PT12H`, `P2W`), une valeur unique avec `min` égal à `max`. Le corps dit le principe, les conseils et les pièges.
+
+La `version` augmente de 1 à chaque changement des ingrédients, de leurs quantités ou des phases ; une correction de texte ne la change pas.
+
+### Créer une variante
+
+Une variante est une recette complète : copier la recette dont elle part, lui donner son propre `id` et `version: 1`, ajouter `derive_de: <id de la recette source>`, puis changer ce qui doit l'être. Elle redonne tous ses ingrédients et toutes ses phases, et pas seulement ce qui change. Une variante peut avoir ses propres variantes ; le vérificateur refuse une chaîne de `derive_de` qui revient à la recette de départ.
+
+### Créer une réalisation
+
+Écrire d'abord les fiches qu'elle désigne : la recette, les produits achetés, les contenants, les cultures d'où viennent les récoltes. Puis copier `modeles/realisation.md` dans `realisations/<id>.md`. L'`id` commence par la date du début, `2026-11-07-liqueur-hibiscus-gingembre` ; `debut` et `fin` sont des dates, ou des dates avec heure (`2026-11-07T18:30`), à l'heure de Paris.
+
+- `recette` et `recette_version`, la version suivie, qui ne dépasse pas celle de la recette.
+- Les ingrédients réellement employés, recopiés : un ingrédient absent de la recette porte `ajoute: true`. Chacun a au plus une provenance — `produit` (avec `lot`, `dluo`, `achat`) s'il a été acheté, `culture` (avec `recolte`, la date de cueillette) s'il vient de chez moi — ou aucune, pour l'eau du robinet.
+- Les phases réellement faites, chacune avec son `id` et son `debut`, puis sa `fin` quand elle s'achève ; une phase absente de la recette porte `ajoutee: true`. `contenant`, `nombre`, `temperature_c` (avec `mesure`) et `conditions` disent où et comment. La durée ne s'écrit jamais : elle se calcule.
+- `statut: en-cours` et `fin: null` tant qu'elle dure ; à la fin, `statut: terminee` (ou `perdue`), la `fin` et le `resultat`.
+- `ecarts`, les écarts voulus ou subis, et leur raison.
+
+### Ajouter une note au journal
+
+Ce qu'on observe, goûte ou corrige après coup ne s'écrit pas sur la réalisation : c'est une entrée du journal, `journal/AAAA/AAAA-MM-JJ-<réalisation>-<événement>.md`, qui porte `realisation: <id>` et un `evenement` parmi `observation`, `degustation`, `incident` et `ajustement`.
+
+```yaml
+---
+date: 2026-11-09
+realisation: 2026-11-07-liqueur-hibiscus-gingembre
+evenement: observation
+---
+```
+
+Une dégustation est une séance : une seule entrée, qui porte `avis`, un avis par participant. Chaque avis a un `participant` — un prénom ou un pseudonyme qu'il accepte de voir dans un dépôt public —, des `criteres` notés de 0 à 10 parmi `couleur`, `limpidite`, `nez`, `bouche`, `texture`, `equilibre`, `finale` et `ensemble`, et un `commentaire` facultatif. Seuls les critères jugés se notent. Le délai depuis la fin ne s'écrit pas : le site le calcule. Ce qui s'est dit à plusieurs voix va dans le corps de l'entrée.
+
+```yaml
+---
+date: 2026-12-10
+realisation: 2026-11-07-liqueur-hibiscus-gingembre
+evenement: degustation
+avis:
+  - participant: Camille
+    criteres: { couleur: 9, nez: 7, bouche: 6 }
+    commentaire: Le gingembre domine encore.
+  - participant: Sam
+    criteres: { couleur: 8, bouche: 7, equilibre: 6 }
+---
+```
 
 ## Ajouter une photo depuis le site
 
