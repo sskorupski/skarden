@@ -18,7 +18,7 @@ calendrier:
 associations:
   favorables: []
   defavorables: []
-photos: []
+photos: [medias/plantes/hysope-20261108-1250-1.jpg]
 ---
 
 Sous-arbrisseau méditerranéen de 30 à 60 cm, persistant ou semi-persistant, à fleurs bleues (parfois roses ou blanches) très visitées par les abeilles et les papillons. Il vit huit à dix ans s'il est taillé chaque année.
