@@ -18,7 +18,7 @@ calendrier:
 associations:
   favorables: []
   defavorables: []
-photos: []
+photos: [medias/plantes/melisse-20261108-1254-1.jpg]
 ---
 
 La mélisse, ou citronnelle des jardins : une touffe de 50 à 80 cm au feuillage gaufré qui sent fortement le citron au froissement. Ses petites fleurs blanches attirent les abeilles — son nom vient du grec *melissa*, l'abeille. Les parties aériennes disparaissent l'hiver ; la souche repart au printemps.
