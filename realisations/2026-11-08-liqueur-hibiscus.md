@@ -9,7 +9,7 @@ fin: null
 ingredients:
   - { ingredient: hibiscus, quantite: 29, unite: g, conservation: seche, produit: hibiscus-karcade-espig-500g, lot: YE1156 }
   - { ingredient: alcool-neutre, quantite: 500, unite: ml, produit: alcool-pour-fruits-suprex-1l }
-  - { ingredient: sucre-roux, quantite: 143, unite: g, ajoute: true }
+  - { ingredient: sucre-de-canne-blond, quantite: 143, unite: g, ajoute: true }
   - { ingredient: eau, quantite: 214, unite: ml }
 phases:
   - id: maceration
