@@ -46,6 +46,10 @@
     "realisation": {
       "$ref": "socle.schema.json#/$defs/lien"
     },
+    "phase": {
+      "$ref": "socle.schema.json#/$defs/id",
+      "description": "La phase close, pour une fin de phase d'une réalisation."
+    },
     "avis": {
       "type": "array",
       "minItems": 1,
@@ -136,6 +140,10 @@
           "avis": {
             "not": {},
             "description": "réservé à une dégustation d'une réalisation."
+          },
+          "phase": {
+            "not": {},
+            "description": "réservé à une fin de phase d'une réalisation."
           }
         }
       }
@@ -185,6 +193,10 @@
           "avis": {
             "not": {},
             "description": "réservé à une dégustation d'une réalisation."
+          },
+          "phase": {
+            "not": {},
+            "description": "réservé à une fin de phase d'une réalisation."
           }
         }
       }
@@ -216,7 +228,8 @@
               "observation",
               "degustation",
               "incident",
-              "ajustement"
+              "ajustement",
+              "fin-de-phase"
             ]
           },
           "effectif": {
@@ -224,26 +237,52 @@
             "description": "réservé aux entrées d'un élevage."
           }
         },
-        "if": {
-          "properties": {
-            "evenement": {
-              "const": "degustation"
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "evenement": {
+                  "const": "degustation"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "avis"
+              ]
+            },
+            "else": {
+              "properties": {
+                "avis": {
+                  "not": {},
+                  "description": "réservé à une dégustation d'une réalisation."
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "evenement": {
+                  "const": "fin-de-phase"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "phase"
+              ]
+            },
+            "else": {
+              "properties": {
+                "phase": {
+                  "not": {},
+                  "description": "réservé à une fin de phase d'une réalisation."
+                }
+              }
             }
           }
-        },
-        "then": {
-          "required": [
-            "avis"
-          ]
-        },
-        "else": {
-          "properties": {
-            "avis": {
-              "not": {},
-              "description": "réservé à une dégustation d'une réalisation."
-            }
-          }
-        }
+        ]
       }
     }
   ]

@@ -68,7 +68,7 @@ Une variante est une recette complète : copier la recette dont elle part, lui d
 
 ### Ajouter une note au journal
 
-Ce qu'on observe, goûte ou corrige après coup ne s'écrit pas sur la réalisation : c'est une entrée du journal, `journal/AAAA/AAAA-MM-JJ-<réalisation>-<événement>.md`, qui porte `realisation: <id>` et un `evenement` parmi `observation`, `degustation`, `incident` et `ajustement`.
+Ce qu'on observe, goûte ou corrige après coup ne s'écrit pas sur la réalisation : c'est une entrée du journal, `journal/AAAA/AAAA-MM-JJ-<réalisation>-<événement>.md`, qui porte `realisation: <id>` et un `evenement` parmi `observation`, `degustation`, `incident`, `ajustement` et `fin-de-phase`.
 
 ```yaml
 ---
@@ -91,6 +91,17 @@ avis:
     commentaire: Le gingembre domine encore.
   - participant: Sam
     criteres: { couleur: 8, bouche: 7, equilibre: 6 }
+---
+```
+
+Une fin de phase se note deux fois, et les deux disent la même date : `fin` sur la phase de la réalisation, et une entrée `fin-de-phase` qui nomme la `phase` close, datée du jour de cette fin. La vérification refuse une entrée dont la phase n'existe pas, est encore sans fin, ou finit un autre jour. Le site l'écrit lui-même quand on déclare la fin depuis la page de la réalisation : un seul commit, sur une branche `phases/<réalisation>-<phase>-<instant>`, sans conversion à attendre, puis une demande de fusion vérifiée comme toute autre.
+
+```yaml
+---
+date: 2026-11-20
+realisation: 2026-11-07-liqueur-hibiscus-gingembre
+evenement: fin-de-phase
+phase: maceration
 ---
 ```
 
