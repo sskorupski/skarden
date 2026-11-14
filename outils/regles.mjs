@@ -14,7 +14,7 @@ export const REGLES = {
     dateDuDebut, finSelonStatut, finApresLeDebut, versionDeLaRecette, uneSeuleProvenance,
     ingredientsDeLaRecette, phasesDeLaRecette, phasesDatees, temperaturesReleveesOrdonnees,
   ],
-  journal: [participantsUniques],
+  journal: [participantsUniques, phaseCloseCeJourLa],
 };
 
 function familleDuRegne(regne) {
@@ -208,4 +208,19 @@ function phasesDeLaRecette(fiche, { recettes }) {
 function participantsUniques({ avis = [] }) {
   return enDouble(avis.map(({ participant }) => participant))
     .map((participant) => `avis : « ${participant} » donne deux avis dans la même séance.`);
+}
+
+// Une fin de phase au journal dit la même chose que la fiche : la phase existe
+// dans la réalisation, elle a une fin, et cette fin tombe le jour de l'entrée.
+function phaseCloseCeJourLa({ evenement, realisation, phase, date }, { realisations }) {
+  if (evenement !== 'fin-de-phase') return [];
+  const fiche = realisations?.get(realisation);
+  if (!fiche) return [];
+  const close = fiche.phases.find(({ id }) => id === phase);
+  if (!close) return [`phase : « ${phase} » n'est pas une phase de la réalisation ${realisation}.`];
+  if (!close.fin) return [`phase : ${phase} est encore sans fin dans la réalisation ${realisation}.`];
+  if (close.fin.slice(0, 10) !== date) {
+    return [`date : ${date}, alors que la phase ${phase} finit le ${close.fin}.`];
+  }
+  return [];
 }

@@ -709,3 +709,63 @@ test('une photo absente citée par une recette est signalée', () => {
   remplacer(racine, RECETTE, 'photos: []', 'photos: [medias/recettes/liqueur-hibiscus.jpg]');
   unSeulDefaut(racine, RECETTE, /medias\/recettes\/liqueur-hibiscus\.jpg/);
 });
+
+// Une fin de phase déclarée écrit `fin` sur la phase et une entrée au journal
+// qui la désigne (cadrage 2026-010).
+const FIN_DE_PHASE = 'journal/2026/2026-11-20-liqueur-hibiscus-gingembre-fin-de-maceration.md';
+
+function phaseClose(racine, fin = '2026-11-20T10:15', entree = {}) {
+  remplacer(racine, REALISATION, '    debut: 2026-11-07T18:30\n', `    debut: 2026-11-07T18:30\n    fin: ${fin}\n`);
+  const { date = '2026-11-20', evenement = 'fin-de-phase', phase = 'phase: maceration\n', chemin = FIN_DE_PHASE } = entree;
+  ecrire(racine, chemin,
+    `---\ndate: ${date}\nrealisation: 2026-11-07-liqueur-hibiscus-gingembre\nevenement: ${evenement}\n${phase}---\n\nMacération close, liqueur filtrée.\n`);
+}
+
+test('une fin de phase qui désigne une phase close ce jour-là est valide', () => {
+  const racine = referentielDesModeles();
+  phaseClose(racine);
+  assert.deepEqual(verifier(racine), []);
+});
+
+test('une fin de phase sans phase est signalée', () => {
+  const racine = referentielDesModeles();
+  phaseClose(racine, undefined, { phase: '' });
+  unSeulDefaut(racine, FIN_DE_PHASE, /phase/);
+});
+
+test("une phase sur une autre entrée qu'une fin de phase est signalée", () => {
+  const racine = referentielDesModeles();
+  phaseClose(racine, undefined, { evenement: 'observation', chemin: 'journal/2026/2026-11-20-liqueur-hibiscus-gingembre-observation.md' });
+  unSeulDefaut(racine, 'journal/2026/2026-11-20-liqueur-hibiscus-gingembre-observation.md', /phase/);
+});
+
+test("une phase sur une entrée de culture est signalée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, 'journal/2026/2026-05-02-basilic-rempotage.md', 'evenement: rempotage', 'evenement: rempotage\nphase: maceration');
+  unSeulDefaut(racine, 'journal/2026/2026-05-02-basilic-rempotage.md', /phase/);
+});
+
+test("une fin de phase sur une entrée de culture est signalée", () => {
+  const racine = referentielDesModeles();
+  remplacer(racine, 'journal/2026/2026-05-02-basilic-rempotage.md', 'evenement: rempotage', 'evenement: fin-de-phase');
+  unSeulDefaut(racine, 'journal/2026/2026-05-02-basilic-rempotage.md', /evenement/);
+});
+
+test("une fin de phase qui désigne une phase absente de la réalisation est signalée", () => {
+  const racine = referentielDesModeles();
+  phaseClose(racine, undefined, { phase: 'phase: filtrage\n' });
+  unSeulDefaut(racine, FIN_DE_PHASE, /filtrage.*n'est pas une phase/);
+});
+
+test("une fin de phase qui désigne une phase encore ouverte est signalée", () => {
+  const racine = referentielDesModeles();
+  ecrire(racine, FIN_DE_PHASE,
+    '---\ndate: 2026-11-20\nrealisation: 2026-11-07-liqueur-hibiscus-gingembre\nevenement: fin-de-phase\nphase: maceration\n---\n');
+  unSeulDefaut(racine, FIN_DE_PHASE, /maceration.*sans fin/);
+});
+
+test("une fin de phase datée d'un autre jour que la fin de la phase est signalée", () => {
+  const racine = referentielDesModeles();
+  phaseClose(racine, '2026-11-19T22:00');
+  unSeulDefaut(racine, FIN_DE_PHASE, /2026-11-19T22:00/);
+});
