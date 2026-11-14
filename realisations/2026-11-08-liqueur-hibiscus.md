@@ -14,6 +14,7 @@ ingredients:
 phases:
   - id: maceration
     debut: 2026-11-08
+    fin: 2026-11-13T16:30
     contenant: bocal-parfait-1l
     nombre: 1
 ecarts:
